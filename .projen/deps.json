@@ -10,6 +10,10 @@
       "type": "build"
     },
     {
+      "name": "@types/standard-version",
+      "type": "build"
+    },
+    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^5",
       "type": "build"
@@ -22,6 +26,10 @@
     {
       "name": "aws-cdk",
       "version": "^2.1.0",
+      "type": "build"
+    },
+    {
+      "name": "cdk-assets",
       "type": "build"
     },
     {
@@ -61,6 +69,14 @@
     },
     {
       "name": "projen",
+      "type": "build"
+    },
+    {
+      "name": "projen-pipelines",
+      "type": "build"
+    },
+    {
+      "name": "standard-version",
       "type": "build"
     },
     {

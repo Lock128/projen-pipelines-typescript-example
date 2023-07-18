@@ -2,12 +2,7 @@
   "files": [
     ".eslintrc.json",
     ".gitattributes",
-    ".github/pull_request_template.md",
-    ".github/workflows/build.yml",
-    ".github/workflows/pull-request-lint.yml",
-    ".github/workflows/upgrade.yml",
     ".gitignore",
-    ".mergify.yml",
     ".npmignore",
     ".npmrc",
     ".projen/deps.json",
@@ -15,6 +10,7 @@
     ".projen/tasks.json",
     "cdk.json",
     "LICENSE",
+    "src/app.ts",
     "tsconfig.dev.json",
     "tsconfig.json"
   ],

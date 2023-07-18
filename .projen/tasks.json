@@ -24,6 +24,18 @@
         }
       ]
     },
+    "bump": {
+      "name": "bump",
+      "description": "Bumps version based on latest git tag",
+      "steps": [
+        {
+          "exec": "pipelines-release bump"
+        },
+        {
+          "exec": "git push --tags"
+        }
+      ]
+    },
     "bundle": {
       "name": "bundle",
       "description": "Prepare assets"
@@ -73,32 +85,35 @@
         }
       ]
     },
-    "deploy": {
-      "name": "deploy",
-      "description": "Deploys your CDK app to the AWS cloud",
+    "deploy:dev": {
+      "name": "deploy:dev",
       "steps": [
         {
-          "exec": "cdk deploy",
-          "receiveArgs": true
+          "exec": "cdk --app cdk.out --progress events --require-approval never deploy MyApp-dev"
         }
       ]
     },
-    "destroy": {
-      "name": "destroy",
-      "description": "Destroys your cdk app in the AWS cloud",
+    "deploy:prod": {
+      "name": "deploy:prod",
       "steps": [
         {
-          "exec": "cdk destroy",
-          "receiveArgs": true
+          "exec": "cdk --app cdk.out --progress events --require-approval never deploy MyApp-prod"
         }
       ]
     },
-    "diff": {
-      "name": "diff",
-      "description": "Diffs the currently deployed app against your code",
+    "diff:dev": {
+      "name": "diff:dev",
       "steps": [
         {
-          "exec": "cdk diff"
+          "exec": "cdk --app cdk.out diff MyApp-dev"
+        }
+      ]
+    },
+    "diff:prod": {
+      "name": "diff:prod",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out diff MyApp-prod"
         }
       ]
     },
@@ -162,10 +177,40 @@
       "name": "pre-compile",
       "description": "Prepare the project for compilation"
     },
+    "publish:assets": {
+      "name": "publish:assets",
+      "steps": [
+        {
+          "exec": "npx cdk-assets -p cdk.out/MyApp-dev.assets.json publish"
+        },
+        {
+          "exec": "npx cdk-assets -p cdk.out/MyApp-prod.assets.json publish"
+        }
+      ]
+    },
+    "release:push-assembly": {
+      "name": "release:push-assembly",
+      "steps": [
+        {
+          "exec": "pipelines-release create-manifest \"cdk.out\"  \"@projen-pipelines-test\""
+        },
+        {
+          "cwd": "cdk.out",
+          "exec": "npm version --no-git-tag-version from-git"
+        },
+        {
+          "cwd": "cdk.out",
+          "exec": "npm publish"
+        }
+      ]
+    },
     "synth": {
       "name": "synth",
       "description": "Synthesizes your cdk app into cdk.out",
       "steps": [
+        {
+          "exec": "rm -rf cdk.out"
+        },
         {
           "exec": "cdk synth"
         }
@@ -175,6 +220,9 @@
       "name": "synth:silent",
       "description": "Synthesizes your cdk app into cdk.out and suppresses the template in stdout (part of \"yarn build\")",
       "steps": [
+        {
+          "exec": "rm -rf cdk.out"
+        },
         {
           "exec": "cdk synth -q"
         }
@@ -238,18 +286,6 @@
         },
         {
           "spawn": "post-upgrade"
-        }
-      ]
-    },
-    "watch": {
-      "name": "watch",
-      "description": "Watches changes in your source code and rebuilds and deploys to the current account",
-      "steps": [
-        {
-          "exec": "cdk deploy --hotswap"
-        },
-        {
-          "exec": "cdk watch"
         }
       ]
     }

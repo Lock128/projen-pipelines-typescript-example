@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CodeCatalyst = void 0;
+const project_1 = require("projen/lib/project");
+const workflow_1 = require("./workflow");
+class CodeCatalyst {
+    constructor() {
+        this.project = new project_1.Project({ name: 'CodeCatalyst Project' });
+        this.workflowsEnabled = true;
+    }
+    addWorkflow(workflowName) {
+        return new workflow_1.CodeCatalystWorkflow(this, workflowName);
+    }
+}
+exports.CodeCatalyst = CodeCatalyst;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29kZWNhdGFseXN0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2VuZ2luZS9jb2RlY2F0YWx5c3QvY29kZWNhdGFseXN0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUFBLGdEQUE2QztBQUM3Qyx5Q0FBa0Q7QUFFbEQsTUFBYSxZQUFZO0lBQXpCO1FBRUUsWUFBTyxHQUFZLElBQUksaUJBQU8sQ0FBQyxFQUFFLElBQUksRUFBRSxzQkFBc0IsRUFBRSxDQUFDLENBQUM7UUFHakUscUJBQWdCLEdBQXdCLElBQUksQ0FBQztJQUsvQyxDQUFDO0lBSEMsV0FBVyxDQUFDLFlBQW9CO1FBQzlCLE9BQU8sSUFBSSwrQkFBb0IsQ0FBQyxJQUFJLEVBQUUsWUFBWSxDQUFDLENBQUE7SUFDckQsQ0FBQztDQUNGO0FBVkQsb0NBVUMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBQcm9qZWN0IH0gZnJvbSAncHJvamVuL2xpYi9wcm9qZWN0JztcbmltcG9ydCB7IENvZGVDYXRhbHlzdFdvcmtmbG93IH0gZnJvbSAnLi93b3JrZmxvdyc7XG5cbmV4cG9ydCBjbGFzcyBDb2RlQ2F0YWx5c3Qge1xuICBcbiAgcHJvamVjdDogUHJvamVjdCA9IG5ldyBQcm9qZWN0KHsgbmFtZTogJ0NvZGVDYXRhbHlzdCBQcm9qZWN0JyB9KTtcbiAgcHJvamVuQ3JlZGVudGlhbHM6IGFueTtcbiAgYWN0aW9uczogYW55O1xuICB3b3JrZmxvd3NFbmFibGVkOiBib29sZWFuIHwgdW5kZWZpbmVkID0gdHJ1ZTtcbiAgXG4gIGFkZFdvcmtmbG93KHdvcmtmbG93TmFtZTogc3RyaW5nKSA6IENvZGVDYXRhbHlzdFdvcmtmbG93IHtcbiAgICByZXR1cm4gbmV3IENvZGVDYXRhbHlzdFdvcmtmbG93KHRoaXMsIHdvcmtmbG93TmFtZSlcbiAgfVxufSJdfQ==

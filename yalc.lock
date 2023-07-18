@@ -1,0 +1,8 @@
+{
+  "version": "v1",
+  "packages": {
+    "projen-pipelines": {
+      "signature": "3d697994c438b44db12ba6d104a45295"
+    }
+  }
+}
