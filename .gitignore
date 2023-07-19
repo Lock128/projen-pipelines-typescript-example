@@ -46,6 +46,6 @@ junit.xml
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
-!/.codecatalyts/workflows/workflow.yml
-!/.codecatalyts/workflows/release-prod.yml
+!/.codecatalyst/workflows/workflow.yml
+!/.codecatalyst/workflows/release-prod.yml
 !/src/app.ts
