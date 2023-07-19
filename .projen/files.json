@@ -1,5 +1,7 @@
 {
   "files": [
+    ".codecatalyts/workflows/release-prod.yml",
+    ".codecatalyts/workflows/workflow.yml",
     ".eslintrc.json",
     ".gitattributes",
     ".gitignore",

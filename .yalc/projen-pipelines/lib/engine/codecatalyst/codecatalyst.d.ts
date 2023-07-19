@@ -5,5 +5,6 @@ export declare class CodeCatalyst {
     projenCredentials: any;
     actions: any;
     workflowsEnabled: boolean | undefined;
+    constructor(project: Project);
     addWorkflow(workflowName: string): CodeCatalystWorkflow;
 }
