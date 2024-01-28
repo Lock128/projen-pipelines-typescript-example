@@ -2,7 +2,9 @@
   "version": "v1",
   "packages": {
     "projen-pipelines": {
-      "signature": "383a18f8b625bc01f16de24e21e94d1f"
+      "signature": "d874866fbfc0147f294623993f3036d9",
+      "file": true,
+      "replaced": "^0.0.35"
     }
   }
 }

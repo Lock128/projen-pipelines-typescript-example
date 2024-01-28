@@ -3,6 +3,8 @@
 /test-reports/
 junit.xml
 /coverage/
+permissions-backup.acl
+/.mergify.yml
 /test/
 /tsconfig.dev.json
 /src/
@@ -20,3 +22,5 @@ tsconfig.tsbuildinfo
 !/assets/
 cdk.out/
 .cdk.staging/
+/.gitattributes
+/.projenrc.ts

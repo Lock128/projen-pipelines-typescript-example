@@ -3,6 +3,7 @@
 !/.projen/tasks.json
 !/.projen/deps.json
 !/.projen/files.json
+!/.github/workflows/pull-request-lint.yml
 !/package.json
 !/LICENSE
 !/.npmignore
@@ -29,11 +30,13 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
-!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
-!/.npmrc
+!/.github/workflows/build.yml
+!/.mergify.yml
+!/.github/workflows/upgrade.yml
+!/.github/pull_request_template.md
 !/test/
 !/tsconfig.json
 !/tsconfig.dev.json
@@ -46,6 +49,7 @@ junit.xml
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
-!/.codecatalyst/workflows/workflow.yml
-!/.codecatalyst/workflows/release-prod.yml
 !/src/app.ts
+!/.codecatalyst/workflows/release-prod.yaml
+!/.codecatalyst/workflows/deploy.yaml
+!/.projenrc.ts

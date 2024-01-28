@@ -15,12 +15,10 @@ Under the hood, after you defined the pipeline and selected target engine that y
 We are considering to allow selecting multiple engines going forward - please let us know if this is a feature you would use or not!
 
 ## Getting Started
-### Pre-Requisites
-This module works on a `projen` projects and it requires you do use the _latest version_ of Projen.
 
 ### Installation
 
-To install the package, add the package `projen-pipelines` to your projects devDeps in your projen configuration file (`.projen.ts`).
+To install the package, add the package `projen-pipelines` to your projects devDeps in your projen configuration file.
 
 
 After installing the package, you can import and use the constructs to define your CDK Pipelines.
@@ -42,17 +40,21 @@ const app = new awscdk.AwsCdkTypeScriptApp({
     'projen-pipelines',
   ],
 });
+
 // Create the pipeline
-new CDKPipeline(app, {
+new GithubCDKPipeline(app, {
   stackPrefix: 'MyApp',
   pkgNamespace: '@company-assemblies',
-  engine: PipelineEngine.CODE_CATALYST,
   stages: [
-    {name: "dev", env:  { account: '111111111111', region: 'eu-central-1' },manualApproval: false },
-    { name: "prod", env:  { account: '222222222222', region: 'eu-central-1' },manualApproval: true }
-  ],
+    {
+      name: 'dev',
+      env: { account: '123456789012', region: 'eu-central-1' },
+    }, {
+      name: 'prod',
+      manualApproval: true,
+      env: {account: '123456789012', region: 'eu-central-1' },
+    }],
 });
-
 ```
 
 After running projen (`npx projen`) a new file called `src/app.ts` will be created and contain a specialized CDK App class for your project.
@@ -92,7 +94,7 @@ app.synth();
 
 ### Deployment
 
-The `CDKPipeline` class creates and adds several tasks to the projen project that then can be used in your pipeline to deploy your application to AWS.
+The `<Engine>CDKPipeline` class creates and adds several tasks to the projen project that then can be used in your pipeline to deploy your application to AWS.
 
 Here's a brief description of each one:
 
@@ -151,22 +153,6 @@ git checkout -b my-branch
 4. **Make your Changes**: Make your changes, additions, or fixes to the codebase. Remember to follow the existing code style.
 
 5. **Test your Changes**: Before committing your changes, make sure to test them to ensure they work as expected and do not introduce bugs.
-
-Testing your changes can be difficult - you will need to have an example project for the engine that you are working on (we do currently not have that automated).
-We advice to use [yalc](https://github.com/wclr/yalc) for testing, the way that you do that is - after installing `yalc`, than on the "source" repository (your local repository of `projen-pielines`), you execute:
-```bash
-npx yalc push --replace
-```
-In you "test project" you then execute 
-
-```bash
-npx yalc link projen-pipelines
-```
-If you now, on the test-project, execute 
-```bash
-npx projen build
-```
-you will be able to test against your local version of the code.
 
 6. **Commit your Changes**: Commit your changes with a descriptive commit message using conventional commit messages.
 

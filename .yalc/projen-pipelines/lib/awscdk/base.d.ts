@@ -1,5 +1,4 @@
 import { Component, awscdk } from 'projen';
-import { BaseEngine, CodeCatalystEngineConfig, GithubEngineConfig } from './engine';
 /**
  * The Environment interface is designed to hold AWS related information
  * for a specific deployment environment within your infrastructure.
@@ -27,22 +26,15 @@ export declare enum PipelineEngine {
     /** Create GitHub actions */
     GITHUB = 0,
     /** Create a .gitlab-ci.yaml file */
-    GITLAB = 1,
-    CODE_CATALYST = 2
-}
-/**
- * Describes the type of pipeline that will be created
- */
-export declare enum DeploymentType {
-    /** Deploy every commit as far as possible; hopefully into production */
-    CONTINUOUS_DEPLOYMENT = 0,
-    /** Build every commit and prepare all assets for a later deployment */
-    CONTINUOUS_DELIVERY = 1
+    GITLAB = 1
 }
 export interface DeploymentStage {
     readonly name: string;
     readonly env: Environment;
     readonly manualApproval?: boolean;
+}
+export interface StageOptions {
+    readonly env: Environment;
 }
 /**
  * The CDKPipelineOptions interface is designed to provide configuration
@@ -65,29 +57,8 @@ export interface CDKPipelineOptions {
      */
     readonly pkgNamespace: string;
     readonly stages: DeploymentStage[];
-    readonly personalStage?: {
-        readonly env: Environment;
-    };
-    readonly featureStages?: {
-        readonly env: Environment;
-    };
-    /**
-     * This field specifies the type of pipeline to create. If set to CONTINUOUS_DEPLOYMENT,
-     * every commit is deployed as far as possible, hopefully into production. If set to
-     * CONTINUOUS_DELIVERY, every commit is built and all assets are prepared for a later deployment.
-     *
-     * @default CONTINUOUS_DELIVERY
-     */
-    readonly deploymentType?: DeploymentType;
-    /**
-     * This field determines the CI/CD tooling that will be used to run the pipeline. The component
-     * will render workflows for the given system. Options include GitHub and GitLab.
-     *
-     * @default - tries to derive it from the projects configuration
-     */
-    readonly engine?: PipelineEngine;
-    readonly githubConfig?: GithubEngineConfig;
-    readonly codecatalystConfig?: CodeCatalystEngineConfig;
+    readonly personalStage?: StageOptions;
+    readonly featureStages?: StageOptions;
     readonly preInstallCommands?: string[];
     readonly preSynthCommands?: string[];
     readonly postSynthCommands?: string[];
@@ -96,36 +67,40 @@ export interface CDKPipelineOptions {
  * The CDKPipeline class extends the Component class and sets up the necessary configuration for deploying AWS CDK (Cloud Development Kit) applications across multiple stages.
  * It also manages tasks such as publishing CDK assets, bumping version based on git tags, and cleaning up conflicting tasks.
  */
-export declare class CDKPipeline extends Component {
-    private app;
-    private props;
+export declare abstract class CDKPipeline extends Component {
+    protected app: awscdk.AwsCdkTypeScriptApp;
+    private baseOptions;
     readonly stackPrefix: string;
-    readonly engine: BaseEngine;
-    constructor(app: awscdk.AwsCdkTypeScriptApp, props: CDKPipelineOptions);
-    private createSynthStage;
+    constructor(app: awscdk.AwsCdkTypeScriptApp, baseOptions: CDKPipelineOptions);
+    protected renderInstallCommands(): string[];
+    protected renderInstallPackageCommands(packageName: string, runPreInstallCommands?: boolean): string[];
+    protected renderSynthCommands(): string[];
+    protected getAssetUploadCommands(needsVersionedArtifacts: boolean): string[];
+    protected renderDeployCommands(stageName: string): string[];
+    protected renderDiffCommands(stageName: string): string[];
     /**
      * This method generates the entry point for the application, including interfaces and classes
      * necessary to set up the pipeline and define the AWS CDK stacks for different environments.
      */
-    private createApplicationEntrypoint;
+    protected createApplicationEntrypoint(): void;
     /**
      * This method sets up tasks to publish CDK assets to all accounts and handle versioning, including bumping the version
      * based on the latest git tag and pushing the CDK assembly to the package repository.
      */
-    private createReleaseTasks;
+    protected createReleaseTasks(): void;
     /**
      * This method sets up tasks for the personal deployment stage, including deployment, watching for changes,
      * comparing changes (diff), and destroying the stack when no longer needed.
      */
-    private createPersonalStage;
+    protected createPersonalStage(): void;
     /**
      * This method sets up tasks for the feature deployment stage, including deployment, comparing changes (diff),
      * and destroying the stack when no longer needed.
      */
-    private createFeatureStage;
+    protected createFeatureStage(): void;
     /**
      * This method sets up tasks for the general pipeline stages (dev, prod), including deployment and comparing changes (diff).
      * @param {DeployStageOptions} stage - The stage to create
      */
-    private createPipelineStage;
+    protected createPipelineStage(stage: DeploymentStage): void;
 }

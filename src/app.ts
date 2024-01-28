@@ -12,6 +12,8 @@ import { App, AppProps, Stack, StackProps } from 'aws-cdk-lib';
 export interface PipelineAppProps extends AppProps {
   /** This function will be used to generate a dev stack. */
   provideDevStack: (app: App, stackId: string, props: PipelineAppStackProps) => Stack;
+  /** This function will be used to generate a preprod stack. */
+  providePreprodStack: (app: App, stackId: string, props: PipelineAppStackProps) => Stack;
   /** This function will be used to generate a prod stack. */
   provideProdStack: (app: App, stackId: string, props: PipelineAppStackProps) => Stack;
 
@@ -37,6 +39,10 @@ export class PipelineApp extends App {
     // If a function is provided for creating a dev stack, it is called with necessary arguments.
     if (props.provideDevStack) {
       props.provideDevStack(this, 'MyApp-dev', { env: {"account":"111111111111","region":"eu-central-1"}, stackName: 'MyApp-dev', stageName: 'dev' });
+    }
+    // If a function is provided for creating a preprod stack, it is called with necessary arguments.
+    if (props.providePreprodStack) {
+      props.providePreprodStack(this, 'MyApp-preprod', { env: {"account":"111111111111","region":"eu-central-1"}, stackName: 'MyApp-preprod', stageName: 'preprod' });
     }
     // If a function is provided for creating a prod stack, it is called with necessary arguments.
     if (props.provideProdStack) {

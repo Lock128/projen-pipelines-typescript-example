@@ -93,6 +93,14 @@
         }
       ]
     },
+    "deploy:preprod": {
+      "name": "deploy:preprod",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out --progress events --require-approval never deploy MyApp-preprod"
+        }
+      ]
+    },
     "deploy:prod": {
       "name": "deploy:prod",
       "steps": [
@@ -106,6 +114,14 @@
       "steps": [
         {
           "exec": "cdk --app cdk.out diff MyApp-dev"
+        }
+      ]
+    },
+    "diff:preprod": {
+      "name": "diff:preprod",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out diff MyApp-preprod"
         }
       ]
     },
@@ -134,7 +150,8 @@
       "description": "Runs eslint against the codebase",
       "steps": [
         {
-          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test build-tools projenrc .projenrc.ts"
+          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern $@ src test build-tools projenrc .projenrc.ts",
+          "receiveArgs": true
         }
       ]
     },
@@ -143,7 +160,7 @@
       "description": "Install project dependencies and update lockfile (non-frozen)",
       "steps": [
         {
-          "exec": "yarn install --check-files"
+          "exec": "npm install"
         }
       ]
     },
@@ -152,7 +169,7 @@
       "description": "Install project dependencies using frozen lockfile",
       "steps": [
         {
-          "exec": "yarn install --check-files --frozen-lockfile"
+          "exec": "npm ci"
         }
       ]
     },
@@ -182,6 +199,9 @@
       "steps": [
         {
           "exec": "npx cdk-assets -p cdk.out/MyApp-dev.assets.json publish"
+        },
+        {
+          "exec": "npx cdk-assets -p cdk.out/MyApp-preprod.assets.json publish"
         },
         {
           "exec": "npx cdk-assets -p cdk.out/MyApp-prod.assets.json publish"
@@ -258,28 +278,13 @@
       },
       "steps": [
         {
-          "exec": "yarn upgrade npm-check-updates"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@amazon-codecatalyst/blueprint-component.workflows,@types/jest,@types/node,@types/standard-version,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,aws-cdk,cdk-assets,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest,jest-junit,projen,projen-pipelines,standard-version,ts-jest,ts-node,typescript,aws-cdk-lib,constructs"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor"
+          "exec": "npm install"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor"
-        },
-        {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor"
-        },
-        {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor"
-        },
-        {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor"
-        },
-        {
-          "exec": "yarn install --check-files"
-        },
-        {
-          "exec": "yarn upgrade"
+          "exec": "npm update @amazon-codecatalyst/blueprint-component.workflows @types/jest @types/node @types/standard-version @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk cdk-assets esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit projen projen-pipelines standard-version ts-jest ts-node typescript aws-cdk-lib constructs"
         },
         {
           "exec": "npx projen"

@@ -1,0 +1,1488 @@
+{
+  "author": {
+    "email": "info@taimos.de",
+    "name": "Taimos GmbH",
+    "organization": true,
+    "roles": [
+      "author"
+    ]
+  },
+  "bin": {
+    "pipelines-release": "lib/release.js"
+  },
+  "bundled": {
+    "@amazon-codecatalyst/blueprint-component.dev-environments": "^0.3.49",
+    "@amazon-codecatalyst/blueprint-component.environments": "^0.3.49",
+    "@amazon-codecatalyst/blueprint-component.source-repositories": "^0.3.49",
+    "@amazon-codecatalyst/blueprint-component.workflows": "^0.3.49",
+    "@amazon-codecatalyst/blueprints.blueprint": "^0.3.49",
+    "standard-version": "^9.5.0"
+  },
+  "dependencies": {
+    "constructs": "^10.3.0",
+    "projen": "^0.79.3"
+  },
+  "dependencyClosure": {
+    "constructs": {
+      "targets": {
+        "dotnet": {
+          "namespace": "Constructs",
+          "packageId": "Constructs"
+        },
+        "go": {
+          "moduleName": "github.com/aws/constructs-go"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "constructs",
+            "groupId": "software.constructs"
+          },
+          "package": "software.constructs"
+        },
+        "js": {
+          "npm": "constructs"
+        },
+        "python": {
+          "distName": "constructs",
+          "module": "constructs"
+        }
+      }
+    },
+    "projen": {
+      "submodules": {
+        "projen.awscdk": {},
+        "projen.build": {},
+        "projen.cdk": {},
+        "projen.cdk8s": {},
+        "projen.cdktf": {},
+        "projen.circleci": {},
+        "projen.github": {},
+        "projen.github.workflows": {},
+        "projen.gitlab": {},
+        "projen.java": {},
+        "projen.javascript": {},
+        "projen.python": {},
+        "projen.release": {},
+        "projen.typescript": {},
+        "projen.vscode": {},
+        "projen.web": {}
+      },
+      "targets": {
+        "go": {
+          "moduleName": "github.com/projen/projen-go"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "projen",
+            "groupId": "io.github.cdklabs"
+          },
+          "package": "io.github.cdklabs.projen"
+        },
+        "js": {
+          "npm": "projen"
+        },
+        "python": {
+          "distName": "projen",
+          "module": "projen"
+        }
+      }
+    }
+  },
+  "description": "projen-pipelines",
+  "docs": {
+    "stability": "stable"
+  },
+  "homepage": "https://github.com/taimos/projen-pipelines.git",
+  "jsiiVersion": "1.93.0 (build 1706ca5)",
+  "keywords": [
+    "aws",
+    "cdk",
+    "projen"
+  ],
+  "license": "Apache-2.0",
+  "metadata": {
+    "jsii": {
+      "pacmak": {
+        "hasDefaultInterfaces": true
+      }
+    },
+    "tscRootDir": "src"
+  },
+  "name": "projen-pipelines",
+  "readme": {
+    "markdown": "# Projen Pipelines\n\n[![npm version](https://badge.fury.io/js/projen-pipelines.svg)](https://www.npmjs.com/package/projen-pipelines)\n\n\nProjen Pipelines is a projen library that provides high-level abstractions for defining continuous delivery (CD) pipelines for AWS CDK applications.\nIt is specifically designed to work with the projen project configuration engine.\n\nThis library provides high-level abstractions for defining multi-environment and multi-account AWS CDK applications with ease.\nWith this library, you can handle complex deployment scenarios with less code and manage your AWS infrastructure in a more efficient and straightforward way.\n## How Projen Pipelines work\n![High level Projen Pipelines Overview](documentation/overview.png)\nUnder the hood, after you defined the pipeline and selected target engine that you want to work on, we are using code generation methods that will create - in your project - the required CI/CD pipeline.\n\nWe are considering to allow selecting multiple engines going forward - please let us know if this is a feature you would use or not!\n\n## Getting Started\n\n### Installation\n\nTo install the package, add the package `projen-pipelines` to your projects devDeps in your projen configuration file.\n\n\nAfter installing the package, you can import and use the constructs to define your CDK Pipelines.\n\n### Usage\n\nYou can start using the constructs provided by Projen Pipelines in your AWS CDK applications. Here's a brief example:\n\n```typescript\nimport { awscdk } from 'projen';\nimport { CDKPipeline, CDKPipelineOptions } from 'projen-pipelines';\n\n// Define your AWS CDK TypeScript App\nconst app = new awscdk.AwsCdkTypeScriptApp({\n  cdkVersion: '2.80.0',\n  name: 'my-awesome-app',\n  defaultReleaseBranch: 'main',\n  devDeps: [\n    'projen-pipelines',\n  ],\n});\n\n// Create the pipeline\nnew GithubCDKPipeline(app, {\n  stackPrefix: 'MyApp',\n  pkgNamespace: '@company-assemblies',\n  stages: [\n    {\n      name: 'dev',\n      env: { account: '123456789012', region: 'eu-central-1' },\n    }, {\n      name: 'prod',\n      manualApproval: true,\n      env: {account: '123456789012', region: 'eu-central-1' },\n    }],\n});\n```\n\nAfter running projen (`npx projen`) a new file called `src/app.ts` will be created and contain a specialized CDK App class for your project.\n\nYou can then use this in your `main.ts` to configure your deployment.\n\n```typescript\nimport { PipelineApp } from './app';\nimport { BackendStack } from './stack';\n\nconst app = new PipelineApp({\n  provideDevStack: (scope, id, props) => {\n    return new BackendStack(scope, id, {\n      ...props,\n      apiHostname: 'api-dev',\n      myConfigSetting: 'value-for-dev',\n    });\n  },\n  provideProdStack: (scope, id, props) => {\n    return new BackendStack(scope, id, {\n      ...props,\n      apiHostname: 'api',\n      myConfigSetting: 'value-for-prod',\n    });\n  },\n  providePersonalStack: (scope, id, props) => {\n    return new BackendStack(scope, id, {\n      ...props,\n      apiHostname: `api-${props.stageName}`,\n      myConfigSetting: 'value-for-personal-stage',\n    });\n  },\n});\n\napp.synth();\n```\n\n### Deployment\n\nThe `<Engine>CDKPipeline` class creates and adds several tasks to the projen project that then can be used in your pipeline to deploy your application to AWS.\n\nHere's a brief description of each one:\n\n1. **deploy:personal** - This task deploys the application's personal stage, which is a distinct, isolated deployment of the application. The personal stage is intended for personal use, such as testing and development.\n\n2. **watch:personal** - This task deploys the personal stage of the application in watch mode. In this mode, the AWS CDK monitors your application source files for changes, automatically re-synthesizing and deploying when it detects any changes.\n\n3. **diff:personal** - This task compares the deployed personal stage with the current state of the application code. It's used to understand what changes would be made if the application were deployed.\n\n4. **destroy:personal** - This task destroys the resources created for the personal stage of the application.\n\n5. **deploy:feature** - This task deploys the application's feature stage. The feature stage is used for new features testing before these are merged into the main branch.\n\n6. **diff:feature** - This task is similar to `diff:personal`, but for the feature stage.\n\n7. **destroy:feature** - This task destroys the resources created for the feature stage of the application.\n\n8. **deploy:<stageName>** - This task deploys a specific stage of the application (like 'dev' or 'prod').\n\n9. **diff:<stageName>** - This task compares the specified application stage with the current state of the application code.\n\n10. **publish:assets** - This task publishes the CDK assets to all accounts. This is useful when the CDK application uses assets like Docker images or files from the S3 bucket.\n\n11. **bump** - This task bumps the version based on the latest git tag and pushes the updated tag to the git repository.\n\n12. **release:push-assembly** - This task creates a manifest, bumps the version without creating a git tag, and publishes the cloud assembly to your registry.\n\nRemember that these tasks are created and managed automatically by the `CDKPipeline` class. You can run these tasks using the `npx projen TASK_NAME` command.\n\n\n## Contributing\n### By raising feature requests or issues\nUse the Github integrated \"[Issues](https://github.com/taimos/projen-pipelines/issues/new)\" view to create an item that you would love to have added to our open source project.\n\n***No request is too big or too small*** - get your thoughts created and we'll get back to you if we have questions!\n\n\n### By committing code\n\nWe welcome all contributions to Projen Pipelines! Here's how you can get started:\n\n1. **Fork the Repository**: Click the 'Fork' button at the top right of this page to duplicate this repository in your GitHub account.\n\n2. **Clone your Fork**: Clone the forked repository to your local machine.\n\n```bash\ngit clone https://github.com/<your_username>/projen-pipelines.git\n```\n\n3. **Create a Branch**: To keep your work organized, create a branch for your contribution.\n\n```bash\ngit checkout -b my-branch\n```\n\n4. **Make your Changes**: Make your changes, additions, or fixes to the codebase. Remember to follow the existing code style.\n\n5. **Test your Changes**: Before committing your changes, make sure to test them to ensure they work as expected and do not introduce bugs.\n\n6. **Commit your Changes**: Commit your changes with a descriptive commit message using conventional commit messages.\n\n```bash\ngit commit -m \"feat: Your descriptive commit message\"\n```\n\n7. **Push to your Fork**: Push your commits to the branch in your forked repository.\n\n```bash\ngit push origin my-branch\n```\n\n8. **Submit a Pull Request**: Once your changes are ready to be reviewed, create a pull request from your forked repository's branch into the `main` branch of this repository.\n\nYour pull request will be reviewed and hopefully merged quickly. Thanks for contributing!\n"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taimos/projen-pipelines.git"
+  },
+  "schema": "jsii/0.10.0",
+  "targets": {
+    "js": {
+      "npm": "projen-pipelines"
+    }
+  },
+  "types": {
+    "projen-pipelines.CDKPipeline": {
+      "abstract": true,
+      "assembly": "projen-pipelines",
+      "base": "projen.Component",
+      "docs": {
+        "remarks": "It also manages tasks such as publishing CDK assets, bumping version based on git tags, and cleaning up conflicting tasks.",
+        "stability": "stable",
+        "summary": "The CDKPipeline class extends the Component class and sets up the necessary configuration for deploying AWS CDK (Cloud Development Kit) applications across multiple stages."
+      },
+      "fqn": "projen-pipelines.CDKPipeline",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        },
+        "locationInModule": {
+          "filename": "src/awscdk/base.ts",
+          "line": 111
+        },
+        "parameters": [
+          {
+            "name": "app",
+            "type": {
+              "fqn": "projen.awscdk.AwsCdkTypeScriptApp"
+            }
+          },
+          {
+            "name": "baseOptions",
+            "type": {
+              "fqn": "projen-pipelines.CDKPipelineOptions"
+            }
+          }
+        ]
+      },
+      "kind": "class",
+      "locationInModule": {
+        "filename": "src/awscdk/base.ts",
+        "line": 107
+      },
+      "methods": [
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "This method generates the entry point for the application, including interfaces and classes necessary to set up the pipeline and define the AWS CDK stacks for different environments."
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 216
+          },
+          "name": "createApplicationEntrypoint",
+          "protected": true
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "This method sets up tasks for the feature deployment stage, including deployment, comparing changes (diff), and destroying the stack when no longer needed."
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 360
+          },
+          "name": "createFeatureStage",
+          "protected": true
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "This method sets up tasks for the personal deployment stage, including deployment, watching for changes, comparing changes (diff), and destroying the stack when no longer needed."
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 341
+          },
+          "name": "createPersonalStage",
+          "protected": true
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "This method sets up tasks for the general pipeline stages (dev, prod), including deployment and comparing changes (diff)."
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 376
+          },
+          "name": "createPipelineStage",
+          "parameters": [
+            {
+              "docs": {
+                "summary": "- The stage to create."
+              },
+              "name": "stage",
+              "type": {
+                "fqn": "projen-pipelines.DeploymentStage"
+              }
+            }
+          ],
+          "protected": true
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "This method sets up tasks to publish CDK assets to all accounts and handle versioning, including bumping the version based on the latest git tag and pushing the CDK assembly to the package repository."
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 301
+          },
+          "name": "createReleaseTasks",
+          "protected": true
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 189
+          },
+          "name": "getAssetUploadCommands",
+          "parameters": [
+            {
+              "name": "needsVersionedArtifacts",
+              "type": {
+                "primitive": "boolean"
+              }
+            }
+          ],
+          "protected": true,
+          "returns": {
+            "type": {
+              "collection": {
+                "elementtype": {
+                  "primitive": "string"
+                },
+                "kind": "array"
+              }
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 200
+          },
+          "name": "renderDeployCommands",
+          "parameters": [
+            {
+              "name": "stageName",
+              "type": {
+                "primitive": "string"
+              }
+            }
+          ],
+          "protected": true,
+          "returns": {
+            "type": {
+              "collection": {
+                "elementtype": {
+                  "primitive": "string"
+                },
+                "kind": "array"
+              }
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 206
+          },
+          "name": "renderDiffCommands",
+          "parameters": [
+            {
+              "name": "stageName",
+              "type": {
+                "primitive": "string"
+              }
+            }
+          ],
+          "protected": true,
+          "returns": {
+            "type": {
+              "collection": {
+                "elementtype": {
+                  "primitive": "string"
+                },
+                "kind": "array"
+              }
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 154
+          },
+          "name": "renderInstallCommands",
+          "protected": true,
+          "returns": {
+            "type": {
+              "collection": {
+                "elementtype": {
+                  "primitive": "string"
+                },
+                "kind": "array"
+              }
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 161
+          },
+          "name": "renderInstallPackageCommands",
+          "parameters": [
+            {
+              "name": "packageName",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "runPreInstallCommands",
+              "optional": true,
+              "type": {
+                "primitive": "boolean"
+              }
+            }
+          ],
+          "protected": true,
+          "returns": {
+            "type": {
+              "collection": {
+                "elementtype": {
+                  "primitive": "string"
+                },
+                "kind": "array"
+              }
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 180
+          },
+          "name": "renderSynthCommands",
+          "protected": true,
+          "returns": {
+            "type": {
+              "collection": {
+                "elementtype": {
+                  "primitive": "string"
+                },
+                "kind": "array"
+              }
+            }
+          }
+        }
+      ],
+      "name": "CDKPipeline",
+      "properties": [
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 109
+          },
+          "name": "stackPrefix",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 111
+          },
+          "name": "app",
+          "protected": true,
+          "type": {
+            "fqn": "projen.awscdk.AwsCdkTypeScriptApp"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/base:CDKPipeline"
+    },
+    "projen-pipelines.CDKPipelineOptions": {
+      "assembly": "projen-pipelines",
+      "datatype": true,
+      "docs": {
+        "remarks": "It allows the definition\nof settings such as the stack prefix and package namespace to be used in the\nAWS stack, along with the environments configuration to be used.",
+        "stability": "stable",
+        "summary": "The CDKPipelineOptions interface is designed to provide configuration options for a CDK (Cloud Development Kit) pipeline."
+      },
+      "fqn": "projen-pipelines.CDKPipelineOptions",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "src/awscdk/base.ts",
+        "line": 65
+      },
+      "name": "CDKPipelineOptions",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "A namespace helps group related resources together, providing\nbetter organization and ease of management.",
+            "stability": "stable",
+            "summary": "This field determines the NPM namespace to be used when packaging CDK cloud assemblies."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 80
+          },
+          "name": "pkgNamespace",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 82
+          },
+          "name": "stages",
+          "type": {
+            "collection": {
+              "elementtype": {
+                "fqn": "projen-pipelines.DeploymentStage"
+              },
+              "kind": "array"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 86
+          },
+          "name": "featureStages",
+          "optional": true,
+          "type": {
+            "fqn": "projen-pipelines.StageOptions"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 84
+          },
+          "name": "personalStage",
+          "optional": true,
+          "type": {
+            "fqn": "projen-pipelines.StageOptions"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 99
+          },
+          "name": "postSynthCommands",
+          "optional": true,
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "string"
+              },
+              "kind": "array"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 97
+          },
+          "name": "preInstallCommands",
+          "optional": true,
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "string"
+              },
+              "kind": "array"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 98
+          },
+          "name": "preSynthCommands",
+          "optional": true,
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "string"
+              },
+              "kind": "array"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "project name",
+            "stability": "stable",
+            "summary": "This field is used to define a prefix for the AWS Stack resources created during the pipeline's operation."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 73
+          },
+          "name": "stackPrefix",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/base:CDKPipelineOptions"
+    },
+    "projen-pipelines.CodeCatalystCDKPipeline": {
+      "assembly": "projen-pipelines",
+      "base": "projen-pipelines.CDKPipeline",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "projen-pipelines.CodeCatalystCDKPipeline",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        },
+        "locationInModule": {
+          "filename": "src/awscdk/codecatalyst.ts",
+          "line": 28
+        },
+        "parameters": [
+          {
+            "name": "app",
+            "type": {
+              "fqn": "projen.awscdk.AwsCdkTypeScriptApp"
+            }
+          },
+          {
+            "name": "options",
+            "type": {
+              "fqn": "projen-pipelines.CodeCatalystCDKPipelineOptions"
+            }
+          }
+        ]
+      },
+      "kind": "class",
+      "locationInModule": {
+        "filename": "src/awscdk/codecatalyst.ts",
+        "line": 19
+      },
+      "methods": [
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/codecatalyst.ts",
+            "line": 91
+          },
+          "name": "createAssetUpload"
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/codecatalyst.ts",
+            "line": 117
+          },
+          "name": "createDeployment",
+          "parameters": [
+            {
+              "name": "stage",
+              "type": {
+                "fqn": "projen-pipelines.DeploymentStage"
+              }
+            }
+          ]
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/codecatalyst.ts",
+            "line": 151
+          },
+          "name": "createWorkflowForStage",
+          "parameters": [
+            {
+              "name": "stage",
+              "type": {
+                "fqn": "projen-pipelines.DeploymentStage"
+              }
+            }
+          ]
+        }
+      ],
+      "name": "CodeCatalystCDKPipeline",
+      "properties": [
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/codecatalyst.ts",
+            "line": 21
+          },
+          "name": "needsVersionedArtifacts",
+          "type": {
+            "primitive": "boolean"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/codecatalyst:CodeCatalystCDKPipeline"
+    },
+    "projen-pipelines.CodeCatalystCDKPipelineOptions": {
+      "assembly": "projen-pipelines",
+      "datatype": true,
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "projen-pipelines.CodeCatalystCDKPipelineOptions",
+      "interfaces": [
+        "projen-pipelines.CDKPipelineOptions"
+      ],
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "src/awscdk/codecatalyst.ts",
+        "line": 15
+      },
+      "name": "CodeCatalystCDKPipelineOptions",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/codecatalyst.ts",
+            "line": 16
+          },
+          "name": "iamRoleArns",
+          "type": {
+            "fqn": "projen-pipelines.CodeCatalystIamRoleConfig"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/codecatalyst:CodeCatalystCDKPipelineOptions"
+    },
+    "projen-pipelines.CodeCatalystIamRoleConfig": {
+      "assembly": "projen-pipelines",
+      "datatype": true,
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "projen-pipelines.CodeCatalystIamRoleConfig",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "src/awscdk/codecatalyst.ts",
+        "line": 8
+      },
+      "name": "CodeCatalystIamRoleConfig",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/codecatalyst.ts",
+            "line": 11
+          },
+          "name": "assetPublishing",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/codecatalyst.ts",
+            "line": 9
+          },
+          "name": "default",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/codecatalyst.ts",
+            "line": 12
+          },
+          "name": "deployment",
+          "optional": true,
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "string"
+              },
+              "kind": "map"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/codecatalyst.ts",
+            "line": 10
+          },
+          "name": "synth",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/codecatalyst:CodeCatalystIamRoleConfig"
+    },
+    "projen-pipelines.DeploymentStage": {
+      "assembly": "projen-pipelines",
+      "datatype": true,
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "projen-pipelines.DeploymentStage",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "src/awscdk/base.ts",
+        "line": 49
+      },
+      "name": "DeploymentStage",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 51
+          },
+          "name": "env",
+          "type": {
+            "fqn": "projen-pipelines.Environment"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 50
+          },
+          "name": "name",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 52
+          },
+          "name": "manualApproval",
+          "optional": true,
+          "type": {
+            "primitive": "boolean"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/base:DeploymentStage"
+    },
+    "projen-pipelines.Environment": {
+      "assembly": "projen-pipelines",
+      "datatype": true,
+      "docs": {
+        "remarks": "Each environment requires a specific account and region for its resources.",
+        "stability": "stable",
+        "summary": "The Environment interface is designed to hold AWS related information for a specific deployment environment within your infrastructure."
+      },
+      "fqn": "projen-pipelines.Environment",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "src/awscdk/base.ts",
+        "line": 10
+      },
+      "name": "Environment",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "It's important because\ndifferent services or features could have distinct permissions and settings\nin different accounts.",
+            "stability": "stable",
+            "summary": "The AWS Account ID associated with the environment."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 16
+          },
+          "name": "account",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "This determines where your resources\nare created and where your application will run. It can affect latency,\navailability, and pricing.",
+            "stability": "stable",
+            "summary": "The AWS Region for the environment."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 23
+          },
+          "name": "region",
+          "type": {
+            "primitive": "string"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/base:Environment"
+    },
+    "projen-pipelines.GithubCDKPipeline": {
+      "assembly": "projen-pipelines",
+      "base": "projen-pipelines.CDKPipeline",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "projen-pipelines.GithubCDKPipeline",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        },
+        "locationInModule": {
+          "filename": "src/awscdk/github.ts",
+          "line": 24
+        },
+        "parameters": [
+          {
+            "name": "app",
+            "type": {
+              "fqn": "projen.awscdk.AwsCdkTypeScriptApp"
+            }
+          },
+          {
+            "name": "options",
+            "type": {
+              "fqn": "projen-pipelines.GithubCDKPipelineOptions"
+            }
+          }
+        ]
+      },
+      "kind": "class",
+      "locationInModule": {
+        "filename": "src/awscdk/github.ts",
+        "line": 17
+      },
+      "methods": [
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/github.ts",
+            "line": 87
+          },
+          "name": "createAssetUpload"
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/github.ts",
+            "line": 126
+          },
+          "name": "createDeployment",
+          "parameters": [
+            {
+              "name": "stage",
+              "type": {
+                "fqn": "projen-pipelines.DeploymentStage"
+              }
+            }
+          ]
+        }
+      ],
+      "name": "GithubCDKPipeline",
+      "properties": [
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/github.ts",
+            "line": 19
+          },
+          "name": "needsVersionedArtifacts",
+          "type": {
+            "primitive": "boolean"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/github:GithubCDKPipeline"
+    },
+    "projen-pipelines.GithubCDKPipelineOptions": {
+      "assembly": "projen-pipelines",
+      "datatype": true,
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "projen-pipelines.GithubCDKPipelineOptions",
+      "interfaces": [
+        "projen-pipelines.CDKPipelineOptions"
+      ],
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "src/awscdk/github.ts",
+        "line": 13
+      },
+      "name": "GithubCDKPipelineOptions",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/github.ts",
+            "line": 14
+          },
+          "name": "iamRoleArns",
+          "type": {
+            "fqn": "projen-pipelines.GithubIamRoleConfig"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/github:GithubCDKPipelineOptions"
+    },
+    "projen-pipelines.GithubIamRoleConfig": {
+      "assembly": "projen-pipelines",
+      "datatype": true,
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "projen-pipelines.GithubIamRoleConfig",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "src/awscdk/github.ts",
+        "line": 6
+      },
+      "name": "GithubIamRoleConfig",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/github.ts",
+            "line": 9
+          },
+          "name": "assetPublishing",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/github.ts",
+            "line": 7
+          },
+          "name": "default",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/github.ts",
+            "line": 10
+          },
+          "name": "deployment",
+          "optional": true,
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "string"
+              },
+              "kind": "map"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/github.ts",
+            "line": 8
+          },
+          "name": "synth",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/github:GithubIamRoleConfig"
+    },
+    "projen-pipelines.GitlabCDKPipeline": {
+      "assembly": "projen-pipelines",
+      "base": "projen-pipelines.CDKPipeline",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "projen-pipelines.GitlabCDKPipeline",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        },
+        "locationInModule": {
+          "filename": "src/awscdk/gitlab.ts",
+          "line": 25
+        },
+        "parameters": [
+          {
+            "name": "app",
+            "type": {
+              "fqn": "projen.awscdk.AwsCdkTypeScriptApp"
+            }
+          },
+          {
+            "name": "options",
+            "type": {
+              "fqn": "projen-pipelines.GitlabCDKPipelineOptions"
+            }
+          }
+        ]
+      },
+      "kind": "class",
+      "locationInModule": {
+        "filename": "src/awscdk/gitlab.ts",
+        "line": 17
+      },
+      "methods": [
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/gitlab.ts",
+            "line": 109
+          },
+          "name": "createAssetUpload",
+          "protected": true
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/gitlab.ts",
+            "line": 127
+          },
+          "name": "createDeployment",
+          "parameters": [
+            {
+              "name": "stage",
+              "type": {
+                "fqn": "projen-pipelines.DeploymentStage"
+              }
+            }
+          ],
+          "protected": true
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/gitlab.ts",
+            "line": 92
+          },
+          "name": "createSynth",
+          "protected": true
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/gitlab.ts",
+            "line": 48
+          },
+          "name": "setupSnippets",
+          "protected": true
+        }
+      ],
+      "name": "GitlabCDKPipeline",
+      "properties": [
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/gitlab.ts",
+            "line": 21
+          },
+          "name": "config",
+          "type": {
+            "fqn": "projen.gitlab.GitlabConfiguration"
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/gitlab.ts",
+            "line": 20
+          },
+          "name": "jobImage",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/gitlab.ts",
+            "line": 19
+          },
+          "name": "needsVersionedArtifacts",
+          "type": {
+            "primitive": "boolean"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/gitlab:GitlabCDKPipeline"
+    },
+    "projen-pipelines.GitlabCDKPipelineOptions": {
+      "assembly": "projen-pipelines",
+      "datatype": true,
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "projen-pipelines.GitlabCDKPipelineOptions",
+      "interfaces": [
+        "projen-pipelines.CDKPipelineOptions"
+      ],
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "src/awscdk/gitlab.ts",
+        "line": 11
+      },
+      "name": "GitlabCDKPipelineOptions",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/gitlab.ts",
+            "line": 12
+          },
+          "name": "iamRoleArns",
+          "type": {
+            "fqn": "projen-pipelines.GitlabIamRoleConfig"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/gitlab.ts",
+            "line": 14
+          },
+          "name": "image",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/gitlab:GitlabCDKPipelineOptions"
+    },
+    "projen-pipelines.GitlabIamRoleConfig": {
+      "assembly": "projen-pipelines",
+      "datatype": true,
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "projen-pipelines.GitlabIamRoleConfig",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "src/awscdk/gitlab.ts",
+        "line": 4
+      },
+      "name": "GitlabIamRoleConfig",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/gitlab.ts",
+            "line": 7
+          },
+          "name": "assetPublishing",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/gitlab.ts",
+            "line": 5
+          },
+          "name": "default",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/gitlab.ts",
+            "line": 8
+          },
+          "name": "deployment",
+          "optional": true,
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "string"
+              },
+              "kind": "map"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/gitlab.ts",
+            "line": 6
+          },
+          "name": "synth",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/gitlab:GitlabIamRoleConfig"
+    },
+    "projen-pipelines.PipelineEngine": {
+      "assembly": "projen-pipelines",
+      "docs": {
+        "remarks": "The component will render workflows for the given system",
+        "stability": "stable",
+        "summary": "The CI/CD tooling used to run your pipeline."
+      },
+      "fqn": "projen-pipelines.PipelineEngine",
+      "kind": "enum",
+      "locationInModule": {
+        "filename": "src/awscdk/base.ts",
+        "line": 30
+      },
+      "members": [
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Create GitHub actions."
+          },
+          "name": "GITHUB"
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Create a .gitlab-ci.yaml file."
+          },
+          "name": "GITLAB"
+        }
+      ],
+      "name": "PipelineEngine",
+      "symbolId": "src/awscdk/base:PipelineEngine"
+    },
+    "projen-pipelines.StageOptions": {
+      "assembly": "projen-pipelines",
+      "datatype": true,
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "projen-pipelines.StageOptions",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "src/awscdk/base.ts",
+        "line": 55
+      },
+      "name": "StageOptions",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/base.ts",
+            "line": 56
+          },
+          "name": "env",
+          "type": {
+            "fqn": "projen-pipelines.Environment"
+          }
+        }
+      ],
+      "symbolId": "src/awscdk/base:StageOptions"
+    }
+  },
+  "version": "0.0.0",
+  "fingerprint": "Ew1c+7DiNpu/xGas3x/G8sk9zH6W4Un4D6aUTO5RtyU="
+}

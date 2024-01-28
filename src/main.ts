@@ -1,4 +1,4 @@
-import { App, Stack, StackProps } from 'aws-cdk-lib';
+import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { PipelineApp } from './app';
 //import { BackendStack } from './stack';
@@ -18,18 +18,22 @@ const devEnv = {
 };
 
 
-
-
 const app = new PipelineApp({
   provideDevStack: (scope, id, props) => {
     return new MyStack(scope, id, {
       ...props,
     });
   },
+  providePreprodStack: (scope, id, props) => {
+    return new MyStack(scope, id, {
+      ...props,
+
+    });
+  },
   provideProdStack: (scope, id, props) => {
     return new MyStack(scope, id, {
       ...props,
-      
+
     });
   },
   /* providePersonalStack: (scope, id, props) => {
