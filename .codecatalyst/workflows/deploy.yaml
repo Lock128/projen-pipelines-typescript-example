@@ -75,4 +75,4 @@ Actions:
         - Run: npx projen deploy:preprod
     DependsOn:
       - PublishAssetsToAWS
-      - deploy-dev
+      - deploy_dev
