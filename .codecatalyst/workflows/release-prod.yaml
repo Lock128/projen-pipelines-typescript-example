@@ -5,7 +5,7 @@ SchemaVersion: "1.0"
 Triggers: []
 Actions:
   deploy_prod:
-    Identifier: aws/build-beta@v1
+    Identifier: aws/build@v1
     Inputs:
       Sources:
         - WorkflowSource

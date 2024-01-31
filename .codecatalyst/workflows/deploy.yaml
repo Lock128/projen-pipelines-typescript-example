@@ -8,7 +8,7 @@ Triggers:
       - main
 Actions:
   SynthCDKApplication:
-    Identifier: aws/build-beta@v1
+    Identifier: aws/build@v1
     Inputs:
       Sources:
         - WorkflowSource
@@ -23,7 +23,7 @@ Actions:
         - Run: npx projen install:ci
         - Run: npx projen build
   PublishAssetsToAWS:
-    Identifier: aws/build-beta@v1
+    Identifier: aws/build@v1
     Inputs:
       Sources:
         - WorkflowSource
@@ -42,7 +42,7 @@ Actions:
     DependsOn:
       - SynthCDKApplication
   deploy_dev:
-    Identifier: aws/build-beta@v1
+    Identifier: aws/build@v1
     Inputs:
       Sources:
         - WorkflowSource
@@ -59,7 +59,7 @@ Actions:
     DependsOn:
       - Publish assets to AWS
   deploy_preprod:
-    Identifier: aws/build-beta@v1
+    Identifier: aws/build@v1
     Inputs:
       Sources:
         - WorkflowSource
