@@ -7,7 +7,7 @@ Triggers:
     Branches:
       - main
 Actions:
-  Synth CDK application:
+  SynthCDKApplication:
     Identifier: aws/build-beta@v1
     Inputs:
       Sources:
@@ -22,7 +22,7 @@ Actions:
       Steps:
         - Run: npx projen install:ci
         - Run: npx projen build
-  Publish assets to AWS:
+  PublishAssetsToAWS:
     Identifier: aws/build-beta@v1
     Inputs:
       Sources:
@@ -40,7 +40,7 @@ Actions:
         - Run: npx projen bump
         - Run: npx projen release:push-assembly
     DependsOn:
-      - Synth CDK application
+      - SynthCDKApplication
   deploy_dev:
     Identifier: aws/build-beta@v1
     Inputs:
