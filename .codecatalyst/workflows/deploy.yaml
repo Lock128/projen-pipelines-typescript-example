@@ -57,7 +57,7 @@ Actions:
         - Run: npx projen install:ci
         - Run: npx projen deploy:dev
     DependsOn:
-      - Publish assets to AWS
+      - PublishAssetsToAWS
   deploy_preprod:
     Identifier: aws/build@v1
     Inputs:
@@ -74,5 +74,5 @@ Actions:
         - Run: npx projen install:ci
         - Run: npx projen deploy:preprod
     DependsOn:
-      - Publish assets to AWS
+      - PublishAssetsToAWS
       - deploy-dev
