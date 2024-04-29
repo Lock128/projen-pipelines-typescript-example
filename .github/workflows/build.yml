@@ -6,7 +6,8 @@ on:
   workflow_dispatch: {}
 jobs:
   build:
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: codebuild-cicd-on-aws-${{ github.run_id }}-${{ github.run_attempt }}
     permissions:
       contents: write
     outputs:
