@@ -4,6 +4,23 @@ Name: release-prod
 SchemaVersion: "1.0"
 Triggers: []
 Actions:
+  SynthCDKApplication:
+    Identifier: aws/build@v1
+    Inputs:
+      Sources:
+        - WorkflowSource
+      Variables:
+        - Name: CI
+          Value: "true"
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: false
+    Configuration:
+      Steps:
+        - Run: npx projen install:ci
+        - Run: npm install @projen-pipelines-test/projen-pipelines-typescript-example@${{github.event.inputs.version}}
+        - Run: mv ./node_modules/@projen-pipelines-test/projen-pipelines-typescript-example cdk.out
+        - Run: npx projen deploy:prod
   deploy_prod:
     Identifier: aws/build@v1
     Inputs:

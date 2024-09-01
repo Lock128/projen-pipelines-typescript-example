@@ -1208,7 +1208,7 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 58
+            "line": 57
           },
           "name": "engineType",
           "overrides": "projen-pipelines.CDKPipeline",
@@ -3331,5 +3331,5 @@
     }
   },
   "version": "0.0.0",
-  "fingerprint": "tBkbrdVGMpOiRwurXJYVcx23ddV62ZyI/zDeXB2AClY="
+  "fingerprint": "gFpxeulHDWhl/8QqK/kXQQTP53EtIs1jmTNHOLZ4yOw="
 }

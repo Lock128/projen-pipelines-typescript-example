@@ -20,6 +20,7 @@ Actions:
         Enabled: false
     Configuration:
       Steps:
+        - Run: npx projen install:ci
         - Run: npx projen build
   PublishAssetsToAWS:
     Identifier: aws/build@v1

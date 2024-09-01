@@ -4,13 +4,9 @@ name: build
 on:
   pull_request: {}
   workflow_dispatch: {}
-  push:
-    branches:
-      - main
 jobs:
   build:
-    #runs-on: ubuntu-latest
-    runs-on: codebuild-cicd-on-aws-${{ github.run_id }}-${{ github.run_attempt }}
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     outputs:
@@ -46,8 +42,7 @@ jobs:
           exit 1
   self-mutation:
     needs: build
-    #runs-on: ubuntu-latest
-    runs-on: codebuild-cicd-on-aws-${{ github.run_id }}-${{ github.run_attempt }}
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     if: always() && needs.build.outputs.self_mutation_happened && !(github.event.pull_request.head.repo.full_name != github.repository)
