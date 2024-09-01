@@ -12,6 +12,10 @@ import { App, AppProps, Stack, StackProps } from 'aws-cdk-lib';
 export interface PipelineAppProps extends AppProps {
   /** This function will be used to generate a dev stack. */
   provideDevStack: (app: App, stackId: string, props: PipelineAppStackProps) => Stack;
+  /** This function will be used to generate a dev2 stack. */
+  provideDev2Stack: (app: App, stackId: string, props: PipelineAppStackProps) => Stack;
+  /** This function will be used to generate a staging stack. */
+  provideStagingStack: (app: App, stackId: string, props: PipelineAppStackProps) => Stack;
   /** This function will be used to generate a preprod stack. */
   providePreprodStack: (app: App, stackId: string, props: PipelineAppStackProps) => Stack;
   /** This function will be used to generate a prod stack. */
@@ -38,15 +42,23 @@ export class PipelineApp extends App {
 
     // If a function is provided for creating a dev stack, it is called with necessary arguments.
     if (props.provideDevStack) {
-      props.provideDevStack(this, 'MyApp-dev', { env: {"account":"111111111111","region":"eu-central-1"}, stackName: 'MyApp-dev', stageName: 'dev' });
+      props.provideDevStack(this, 'MyApp-dev', { env: { account: '111111111111', region: 'eu-central-1' }, stackName: 'MyApp-dev', stageName: 'dev' });
+    }
+    // If a function is provided for creating a dev2 stack, it is called with necessary arguments.
+    if (props.provideDev2Stack) {
+      props.provideDev2Stack(this, 'MyApp-dev2', { env: { account: '13131313', region: 'eu-central-1' }, stackName: 'MyApp-dev2', stageName: 'dev2' });
+    }
+    // If a function is provided for creating a staging stack, it is called with necessary arguments.
+    if (props.provideStagingStack) {
+      props.provideStagingStack(this, 'MyApp-staging', { env: { account: '1212121212', region: 'eu-central-1' }, stackName: 'MyApp-staging', stageName: 'staging' });
     }
     // If a function is provided for creating a preprod stack, it is called with necessary arguments.
     if (props.providePreprodStack) {
-      props.providePreprodStack(this, 'MyApp-preprod', { env: {"account":"111111111111","region":"eu-central-1"}, stackName: 'MyApp-preprod', stageName: 'preprod' });
+      props.providePreprodStack(this, 'MyApp-preprod', { env: { account: '111111111111', region: 'eu-central-1' }, stackName: 'MyApp-preprod', stageName: 'preprod' });
     }
     // If a function is provided for creating a prod stack, it is called with necessary arguments.
     if (props.provideProdStack) {
-      props.provideProdStack(this, 'MyApp-prod', { env: {"account":"222222222222","region":"eu-west-1"}, stackName: 'MyApp-prod', stageName: 'prod' });
+      props.provideProdStack(this, 'MyApp-prod', { env: { account: '222222222222', region: 'eu-west-1' }, stackName: 'MyApp-prod', stageName: 'prod' });
     }
 
 

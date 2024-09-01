@@ -1,4 +1,6 @@
 import { Component, awscdk } from 'projen';
+import { PipelineEngine } from '../engine';
+import { PipelineStep } from '../steps';
 /**
  * The Environment interface is designed to hold AWS related information
  * for a specific deployment environment within your infrastructure.
@@ -19,20 +21,34 @@ export interface Environment {
     readonly region: string;
 }
 /**
- * The CI/CD tooling used to run your pipeline.
- * The component will render workflows for the given system
+ * Options for stages that are part of the pipeline
  */
-export declare enum PipelineEngine {
-    /** Create GitHub actions */
-    GITHUB = 0,
-    /** Create a .gitlab-ci.yaml file */
-    GITLAB = 1
-}
-export interface DeploymentStage {
-    readonly name: string;
-    readonly env: Environment;
+export interface DeploymentStage extends NamedStageOptions {
     readonly manualApproval?: boolean;
 }
+/**
+ * Options for stages that are not part of the pipeline
+ */
+export interface IndependentStage extends NamedStageOptions {
+    /**
+     * This specifies whether the stage should be deployed on push
+     *
+     * @default false
+     */
+    readonly deployOnPush?: boolean;
+    readonly postDiffSteps?: PipelineStep[];
+    readonly postDeploySteps?: PipelineStep[];
+}
+/**
+ * Options for a CDK stage with a name
+ */
+export interface NamedStageOptions extends StageOptions {
+    readonly name: string;
+    readonly watchable?: boolean;
+}
+/**
+ * Options for a CDK stage like the target environment
+ */
 export interface StageOptions {
     readonly env: Environment;
 }
@@ -44,6 +60,11 @@ export interface StageOptions {
  */
 export interface CDKPipelineOptions {
     /**
+     * the name of the branch to deploy from
+     * @default main
+     */
+    readonly branchName?: string;
+    /**
      * This field is used to define a prefix for the AWS Stack resources created
      * during the pipeline's operation.
      *
@@ -51,17 +72,34 @@ export interface CDKPipelineOptions {
      */
     readonly stackPrefix?: string;
     /**
+     * If set to true all CDK actions will also include <stackName>/* to deploy/diff/destroy sub stacks of the main stack.
+     * You can use this to deploy CDk applications containing multiple stacks.
+     *
+     * @default false
+     */
+    readonly deploySubStacks?: boolean;
+    /**
      * This field determines the NPM namespace to be used when packaging CDK cloud
      * assemblies. A namespace helps group related resources together, providing
      * better organization and ease of management.
      */
     readonly pkgNamespace: string;
+    /**
+     * This field specifies a list of stages that should be deployed using a CI/CD pipeline
+     */
     readonly stages: DeploymentStage[];
+    /** This specifies details for independent stages */
+    readonly independentStages?: IndependentStage[];
+    /** This specifies details for a personal stage */
     readonly personalStage?: StageOptions;
+    /** This specifies details for feature stages */
     readonly featureStages?: StageOptions;
     readonly preInstallCommands?: string[];
     readonly preSynthCommands?: string[];
     readonly postSynthCommands?: string[];
+    readonly preInstallSteps?: PipelineStep[];
+    readonly preSynthSteps?: PipelineStep[];
+    readonly postSynthSteps?: PipelineStep[];
 }
 /**
  * The CDKPipeline class extends the Component class and sets up the necessary configuration for deploying AWS CDK (Cloud Development Kit) applications across multiple stages.
@@ -69,15 +107,19 @@ export interface CDKPipelineOptions {
  */
 export declare abstract class CDKPipeline extends Component {
     protected app: awscdk.AwsCdkTypeScriptApp;
-    private baseOptions;
+    protected baseOptions: CDKPipelineOptions;
     readonly stackPrefix: string;
+    readonly branchName: string;
     constructor(app: awscdk.AwsCdkTypeScriptApp, baseOptions: CDKPipelineOptions);
+    abstract engineType(): PipelineEngine;
     protected renderInstallCommands(): string[];
     protected renderInstallPackageCommands(packageName: string, runPreInstallCommands?: boolean): string[];
     protected renderSynthCommands(): string[];
-    protected getAssetUploadCommands(needsVersionedArtifacts: boolean): string[];
+    protected renderAssetUploadCommands(stageName?: string): string[];
+    protected renderAssemblyUploadCommands(): string[];
     protected renderDeployCommands(stageName: string): string[];
     protected renderDiffCommands(stageName: string): string[];
+    protected createSafeStageName(name: string): string;
     /**
      * This method generates the entry point for the application, including interfaces and classes
      * necessary to set up the pipeline and define the AWS CDK stacks for different environments.
@@ -103,4 +145,10 @@ export declare abstract class CDKPipeline extends Component {
      * @param {DeployStageOptions} stage - The stage to create
      */
     protected createPipelineStage(stage: DeploymentStage): void;
+    /**
+     * This method sets up tasks for the independent stages including deployment and comparing changes (diff).
+     * @param {NamedStageOptions} stage - The stage to create
+     */
+    protected createIndependentStage(stage: IndependentStage): void;
+    protected getCliStackPattern(stage: string): string;
 }

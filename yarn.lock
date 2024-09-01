@@ -7,14 +7,14 @@
   resolved "https://registry.npmjs.org/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
-"@amazon-codecatalyst/blueprint-component.environments@*", "@amazon-codecatalyst/blueprint-component.environments@^0.3.49":
+"@amazon-codecatalyst/blueprint-component.environments@*":
   version "0.3.51"
   resolved "https://registry.npmjs.org/@amazon-codecatalyst/blueprint-component.environments/-/blueprint-component.environments-0.3.51.tgz"
   integrity sha512-7LCYvop9jYElGA7waYi7mZDhnOkIGdRTdjcyZqM4svaLyW2M6QaQN+Ay+CC79ig3aBlfO062rE/+IR8v3CIWvQ==
   dependencies:
     projen "0.71.112"
 
-"@amazon-codecatalyst/blueprint-component.source-repositories@*", "@amazon-codecatalyst/blueprint-component.source-repositories@^0.3.49":
+"@amazon-codecatalyst/blueprint-component.source-repositories@*":
   version "0.3.51"
   resolved "https://registry.npmjs.org/@amazon-codecatalyst/blueprint-component.source-repositories/-/blueprint-component.source-repositories-0.3.51.tgz"
   integrity sha512-Buu6+EgOMpaCNcxdvoAbB8fB97YrklzHV40ZR5L3KhTwjAZlH8d3quVhggmcRVDK9QG9B3H+JUQVSeMSEZRJBQ==
@@ -26,7 +26,7 @@
     mustache "^4"
     projen "0.71.112"
 
-"@amazon-codecatalyst/blueprint-component.workflows@^0.3.49", "@amazon-codecatalyst/blueprint-component.workflows@^0.3.51":
+"@amazon-codecatalyst/blueprint-component.workflows@^0.3.51":
   version "0.3.51"
   resolved "https://registry.npmjs.org/@amazon-codecatalyst/blueprint-component.workflows/-/blueprint-component.workflows-0.3.51.tgz"
   integrity sha512-w4edV9J5kqnV/EkV2wYWFtF0l984f5rKP0gN2zysh35PeeQ2LJ3asNqWAr6oBcx4vAwdpaCVqJ3gkda3GP1hiA==
@@ -35,7 +35,7 @@
     projen "0.71.112"
     yaml "*"
 
-"@amazon-codecatalyst/blueprints.blueprint@*", "@amazon-codecatalyst/blueprints.blueprint@^0.3.49":
+"@amazon-codecatalyst/blueprints.blueprint@*":
   version "0.3.51"
   resolved "https://registry.npmjs.org/@amazon-codecatalyst/blueprints.blueprint/-/blueprints.blueprint-0.3.51.tgz"
   integrity sha512-Cdgqn8PimQcCysmbGycCg0j2O6Nm5evwW+msOi51+7lBWdfD/YmOFZWvsoOFPBiGUdWgwL+L9K6kg627law/8A==
@@ -4348,12 +4348,6 @@ process-nextick-args@~2.0.0:
   version "0.0.0"
   resolved "file:.yalc/projen-pipelines"
   dependencies:
-    "@amazon-codecatalyst/blueprint-component.dev-environments" "^0.3.49"
-    "@amazon-codecatalyst/blueprint-component.environments" "^0.3.49"
-    "@amazon-codecatalyst/blueprint-component.source-repositories" "^0.3.49"
-    "@amazon-codecatalyst/blueprint-component.workflows" "^0.3.49"
-    "@amazon-codecatalyst/blueprints.blueprint" "^0.3.49"
-    projen "^0.79.3"
     standard-version "^9.5.0"
 
 projen@^0.71.112, projen@0.71.112:
@@ -4375,7 +4369,7 @@ projen@^0.71.112, projen@0.71.112:
     yaml "^2.2.2"
     yargs "^17.7.2"
 
-projen@^0.79.0, projen@^0.79.3:
+projen@^0.79.0, "projen@>=0.81.0 <1.0.0":
   version "0.79.3"
   resolved "https://registry.npmjs.org/projen/-/projen-0.79.3.tgz"
   integrity sha512-nmYW1YXFNdZNNDlfHsT4sMfE5vMgMbpG061RT+gtuvGkhm+6nYd8+kWo6xk+2J/egoNvXyS5kEbh4fFc41I5hA==

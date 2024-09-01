@@ -24,6 +24,16 @@ const app = new PipelineApp({
       ...props,
     });
   },
+  provideDev2Stack: (scope, id, props) => {
+    return new MyStack(scope, id, {
+      ...props,
+    });
+  },
+  provideStagingStack: (scope, id, props) => {
+    return new MyStack(scope, id, {
+      ...props,
+    });
+  },
   providePreprodStack: (scope, id, props) => {
     return new MyStack(scope, id, {
       ...props,

@@ -20,7 +20,6 @@ Actions:
         Enabled: false
     Configuration:
       Steps:
-        - Run: npx projen install:ci
         - Run: npx projen build
   PublishAssetsToAWS:
     Identifier: aws/build@v1
@@ -35,10 +34,7 @@ Actions:
         Enabled: false
     Configuration:
       Steps:
-        - Run: npx projen install:ci
         - Run: npx projen publish:assets
-        - Run: npx projen bump
-        - Run: npx projen release:push-assembly
     DependsOn:
       - SynthCDKApplication
   deploy_dev:
@@ -58,6 +54,42 @@ Actions:
         - Run: npx projen deploy:dev
     DependsOn:
       - PublishAssetsToAWS
+  deploy_dev2:
+    Identifier: aws/build@v1
+    Inputs:
+      Sources:
+        - WorkflowSource
+      Variables:
+        - Name: CI
+          Value: "true"
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: false
+    Configuration:
+      Steps:
+        - Run: npx projen install:ci
+        - Run: npx projen deploy:dev2
+    DependsOn:
+      - PublishAssetsToAWS
+      - deploy_dev
+  deploy_staging:
+    Identifier: aws/build@v1
+    Inputs:
+      Sources:
+        - WorkflowSource
+      Variables:
+        - Name: CI
+          Value: "true"
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: false
+    Configuration:
+      Steps:
+        - Run: npx projen install:ci
+        - Run: npx projen deploy:staging
+    DependsOn:
+      - PublishAssetsToAWS
+      - deploy_dev2
   deploy_preprod:
     Identifier: aws/build@v1
     Inputs:
@@ -75,4 +107,4 @@ Actions:
         - Run: npx projen deploy:preprod
     DependsOn:
       - PublishAssetsToAWS
-      - deploy_dev
+      - deploy_staging

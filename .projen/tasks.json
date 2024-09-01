@@ -89,7 +89,15 @@
       "name": "deploy:dev",
       "steps": [
         {
-          "exec": "cdk --app cdk.out --progress events --require-approval never deploy MyApp-dev"
+          "exec": "cdk --app cdk.out --outputs-file cdk-outputs-dev.json --progress events --require-approval never deploy MyApp-dev"
+        }
+      ]
+    },
+    "deploy:dev2": {
+      "name": "deploy:dev2",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out --outputs-file cdk-outputs-dev2.json --progress events --require-approval never deploy MyApp-dev2"
         }
       ]
     },
@@ -97,7 +105,7 @@
       "name": "deploy:preprod",
       "steps": [
         {
-          "exec": "cdk --app cdk.out --progress events --require-approval never deploy MyApp-preprod"
+          "exec": "cdk --app cdk.out --outputs-file cdk-outputs-preprod.json --progress events --require-approval never deploy MyApp-preprod"
         }
       ]
     },
@@ -105,7 +113,15 @@
       "name": "deploy:prod",
       "steps": [
         {
-          "exec": "cdk --app cdk.out --progress events --require-approval never deploy MyApp-prod"
+          "exec": "cdk --app cdk.out --outputs-file cdk-outputs-prod.json --progress events --require-approval never deploy MyApp-prod"
+        }
+      ]
+    },
+    "deploy:staging": {
+      "name": "deploy:staging",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out --outputs-file cdk-outputs-staging.json --progress events --require-approval never deploy MyApp-staging"
         }
       ]
     },
@@ -114,6 +130,14 @@
       "steps": [
         {
           "exec": "cdk --app cdk.out diff MyApp-dev"
+        }
+      ]
+    },
+    "diff:dev2": {
+      "name": "diff:dev2",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out diff MyApp-dev2"
         }
       ]
     },
@@ -130,6 +154,14 @@
       "steps": [
         {
           "exec": "cdk --app cdk.out diff MyApp-prod"
+        }
+      ]
+    },
+    "diff:staging": {
+      "name": "diff:staging",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out diff MyApp-staging"
         }
       ]
     },
@@ -198,13 +230,59 @@
       "name": "publish:assets",
       "steps": [
         {
-          "exec": "npx cdk-assets -p cdk.out/MyApp-dev.assets.json publish"
+          "spawn": "publish:assets:dev"
         },
+        {
+          "spawn": "publish:assets:dev2"
+        },
+        {
+          "spawn": "publish:assets:staging"
+        },
+        {
+          "spawn": "publish:assets:preprod"
+        },
+        {
+          "spawn": "publish:assets:prod"
+        }
+      ]
+    },
+    "publish:assets:dev": {
+      "name": "publish:assets:dev",
+      "steps": [
+        {
+          "exec": "npx cdk-assets -p cdk.out/MyApp-dev.assets.json publish"
+        }
+      ]
+    },
+    "publish:assets:dev2": {
+      "name": "publish:assets:dev2",
+      "steps": [
+        {
+          "exec": "npx cdk-assets -p cdk.out/MyApp-dev2.assets.json publish"
+        }
+      ]
+    },
+    "publish:assets:preprod": {
+      "name": "publish:assets:preprod",
+      "steps": [
         {
           "exec": "npx cdk-assets -p cdk.out/MyApp-preprod.assets.json publish"
-        },
+        }
+      ]
+    },
+    "publish:assets:prod": {
+      "name": "publish:assets:prod",
+      "steps": [
         {
           "exec": "npx cdk-assets -p cdk.out/MyApp-prod.assets.json publish"
+        }
+      ]
+    },
+    "publish:assets:staging": {
+      "name": "publish:assets:staging",
+      "steps": [
+        {
+          "exec": "npx cdk-assets -p cdk.out/MyApp-staging.assets.json publish"
         }
       ]
     },

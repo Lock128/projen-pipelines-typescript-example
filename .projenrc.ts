@@ -16,6 +16,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'projen-pipelines',
     '@amazon-codecatalyst/blueprint-component.workflows',
   ],
+
   packageManager: NodePackageManager.NPM,
 
 });
@@ -57,6 +58,8 @@ new CodeCatalystCDKPipeline(project, {
   //engine: PipelineEngine.CODE_CATALYST,
   stages: [
     { name: 'dev', env: { account: '111111111111', region: 'eu-central-1' }, manualApproval: false },
+    { name: 'dev2', env: { account: '13131313', region: 'eu-central-1' }, manualApproval: false },
+    { name: 'staging', env: { account: '1212121212', region: 'eu-central-1' }, manualApproval: false },
     { name: 'preprod', env: { account: '111111111111', region: 'eu-central-1' }, manualApproval: false },
     { name: 'prod', env: { account: '222222222222', region: 'eu-west-1' }, manualApproval: true },
   ],
