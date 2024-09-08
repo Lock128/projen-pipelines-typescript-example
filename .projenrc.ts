@@ -24,20 +24,23 @@ const project = new awscdk.AwsCdkTypeScriptApp({
 //addJestNoCompileModern, addJestNoCompileLegacy, determineInstallWorkingDirectory, node
 
 // Create the pipeline
-
-/*new GithubCDKPipeline(project, {
+/*
+new GithubCDKPipeline(project, {
   stackPrefix: 'MyApp',
   pkgNamespace: '@projen-pipelines-test',
   //engine: PipelineEngine.CODE_CATALYST,
   stages: [
     { name: 'dev', env: { account: '111111111111', region: 'eu-central-1' }, manualApproval: false },
+    { name: 'dev2', env: { account: '13131313', region: 'eu-central-1' }, manualApproval: false },
+    { name: 'staging', env: { account: '1212121212', region: 'eu-central-1' }, manualApproval: false },
+    { name: 'preprod', env: { account: '111111111111', region: 'eu-central-1' }, manualApproval: false },
     { name: 'prod', env: { account: '222222222222', region: 'eu-west-1' }, manualApproval: true },
   ],
   iamRoleArns: {
 
   },
 });
-
+/*
 new GitlabCDKPipeline(project, {
   stackPrefix: 'MyApp',
   pkgNamespace: '@projen-pipelines-test',
