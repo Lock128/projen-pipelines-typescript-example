@@ -53,6 +53,11 @@ Actions:
       Steps:
         - Run: npx projen install:ci
         - Run: npx projen deploy:dev
+    Environment:
+      Name: dev
+      Connections:
+        - Name: awsAccount
+          Role: dev-role
     DependsOn:
       - PublishAssetsToAWS
   deploy_dev2:
@@ -88,6 +93,11 @@ Actions:
       Steps:
         - Run: npx projen install:ci
         - Run: npx projen deploy:staging
+    Environment:
+      Name: staging
+      Connections:
+        - Name: awsAccount
+          Role: staging-role
     DependsOn:
       - PublishAssetsToAWS
       - deploy_dev2
@@ -106,6 +116,11 @@ Actions:
       Steps:
         - Run: npx projen install:ci
         - Run: npx projen deploy:preprod
+    Environment:
+      Name: preprod
+      Connections:
+        - Name: awsAccount
+          Role: preprod-role
     DependsOn:
       - PublishAssetsToAWS
       - deploy_staging
@@ -130,6 +145,11 @@ Actions:
       Steps:
         - Run: npx projen install:ci
         - Run: npx projen deploy:prod
+    Environment:
+      Name: prod
+      Connections:
+        - Name: awsAccount
+          Role: prod-role
     DependsOn:
       - PublishAssetsToAWS
       - approve_prod

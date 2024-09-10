@@ -70,7 +70,16 @@ new CodeCatalystCDKPipeline(project, {
   ],
   independentStages: [{ name: 'ind1', env: { account: '111111111111', region: 'eu-central-1' } },
   { name: 'ind2', env: { account: '13131313', region: 'eu-central-1' } },],
-  iamRoleArns: {},
+  iamRoleArns: {
+    synth: 'synthRole',
+    assetPublishing: 'publishRole',
+    deployment: {
+      dev: 'devRole',
+      prod: 'prodRole',
+      preprod: '2222:arn',
+      staging: 'mystaging-arn',
+    },
+  },
 });
 
 project.synth();

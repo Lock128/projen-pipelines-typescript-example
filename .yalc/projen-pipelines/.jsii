@@ -11,6 +11,7 @@
     "pipelines-release": "lib/release.js"
   },
   "bundled": {
+    "@amazon-codecatalyst/blueprint-component.environments": "^0.3.151",
     "@amazon-codecatalyst/blueprint-component.workflows": "^0.3.151",
     "@amazon-codecatalyst/blueprints.blueprint": "^0.3.151",
     "standard-version": "^9.5.0"
@@ -1134,7 +1135,7 @@
         },
         "locationInModule": {
           "filename": "src/awscdk/codecatalyst.ts",
-          "line": 56
+          "line": 64
         },
         "parameters": [
           {
@@ -1154,7 +1155,7 @@
       "kind": "class",
       "locationInModule": {
         "filename": "src/awscdk/codecatalyst.ts",
-        "line": 47
+        "line": 54
       },
       "methods": [
         {
@@ -1163,7 +1164,7 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 130
+            "line": 219
           },
           "name": "createAssetUpload"
         },
@@ -1173,7 +1174,7 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 156
+            "line": 245
           },
           "name": "createDeployment",
           "parameters": [
@@ -1191,7 +1192,17 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 197
+            "line": 100
+          },
+          "name": "createEnvironments"
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/awscdk/codecatalyst.ts",
+            "line": 287
           },
           "name": "createIndependentDeployment",
           "parameters": [
@@ -1210,7 +1221,7 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 88
+            "line": 177
           },
           "name": "engineType",
           "overrides": "projen-pipelines.CDKPipeline",
@@ -1230,7 +1241,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 49
+            "line": 56
           },
           "name": "needsVersionedArtifacts",
           "type": {
@@ -1253,7 +1264,7 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "src/awscdk/codecatalyst.ts",
-        "line": 43
+        "line": 50
       },
       "name": "CodeCatalystCDKPipelineOptions",
       "properties": [
@@ -1265,7 +1276,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 44
+            "line": 51
           },
           "name": "iamRoleArns",
           "type": {
@@ -1285,19 +1296,20 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "src/awscdk/codecatalyst.ts",
-        "line": 36
+        "line": 37
       },
       "name": "CodeCatalystIamRoleConfig",
       "properties": [
         {
           "abstract": true,
           "docs": {
-            "stability": "stable"
+            "stability": "stable",
+            "summary": "IAM role ARN for the asset publishing step."
           },
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 39
+            "line": 43
           },
           "name": "assetPublishing",
           "optional": true,
@@ -1308,12 +1320,35 @@
         {
           "abstract": true,
           "docs": {
-            "stability": "stable"
+            "stability": "stable",
+            "summary": "IAM role ARN for the asset publishing step for a specific stage."
           },
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 37
+            "line": 45
+          },
+          "name": "assetPublishingPerStage",
+          "optional": true,
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "string"
+              },
+              "kind": "map"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "Default IAM role ARN used if no specific role is provided."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/awscdk/codecatalyst.ts",
+            "line": 39
           },
           "name": "default",
           "optional": true,
@@ -1324,12 +1359,13 @@
         {
           "abstract": true,
           "docs": {
-            "stability": "stable"
+            "stability": "stable",
+            "summary": "IAM role ARNs for different deployment stages."
           },
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 40
+            "line": 47
           },
           "name": "deployment",
           "optional": true,
@@ -1345,12 +1381,13 @@
         {
           "abstract": true,
           "docs": {
-            "stability": "stable"
+            "stability": "stable",
+            "summary": "IAM role ARN for the synthesis step."
           },
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 38
+            "line": 41
           },
           "name": "synth",
           "optional": true,
@@ -3333,5 +3370,5 @@
     }
   },
   "version": "0.0.0",
-  "fingerprint": "Z1VsVidRCI6RC3tdqEHbN73d61ac/34P13tIOrKIcBI="
+  "fingerprint": "i6/yvm6drZ7q8/G00FH4f8hXhELtCCeByJarAJM0Cyg="
 }
