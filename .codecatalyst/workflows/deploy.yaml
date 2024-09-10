@@ -111,7 +111,7 @@ Actions:
       - deploy_staging
   approve_prod:
     Identifier: aws/approval@v1
-    dependsOn:
+    DependsOn:
       - deploy_preprod
     Configuration:
       ApprovalsRequired: 1
@@ -135,7 +135,7 @@ Actions:
       - approve_prod
   approve_prod_us:
     Identifier: aws/approval@v1
-    dependsOn:
+    DependsOn:
       - deploy_prod
     Configuration:
       ApprovalsRequired: 1
