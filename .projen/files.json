@@ -1,7 +1,6 @@
 {
   "files": [
     ".codecatalyst/workflows/deploy.yaml",
-    ".codecatalyst/workflows/release-prod.yaml",
     ".eslintrc.json",
     ".gitattributes",
     ".github/pull_request_template.md",

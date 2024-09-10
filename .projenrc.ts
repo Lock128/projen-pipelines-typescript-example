@@ -65,10 +65,12 @@ new CodeCatalystCDKPipeline(project, {
     { name: 'staging', env: { account: '1212121212', region: 'eu-central-1' }, manualApproval: false },
     { name: 'preprod', env: { account: '111111111111', region: 'eu-central-1' }, manualApproval: false },
     { name: 'prod', env: { account: '222222222222', region: 'eu-west-1' }, manualApproval: true },
+    { name: 'prod_us', env: { account: '222222222222', region: 'us-west-2' }, manualApproval: true },
+    { name: 'prod_in', env: { account: '222222222222', region: 'ap-southeast-1' }, manualApproval: false },
   ],
-  iamRoleArns: {
-
-  },
+  independentStages: [{ name: 'ind1', env: { account: '111111111111', region: 'eu-central-1' } },
+  { name: 'ind2', env: { account: '13131313', region: 'eu-central-1' } },],
+  iamRoleArns: {},
 });
 
 project.synth();

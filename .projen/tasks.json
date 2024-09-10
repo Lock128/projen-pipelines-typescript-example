@@ -101,6 +101,22 @@
         }
       ]
     },
+    "deploy:ind1": {
+      "name": "deploy:ind1",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out --outputs-file cdk-outputs-ind1.json --progress events --require-approval never deploy MyApp-ind1"
+        }
+      ]
+    },
+    "deploy:ind2": {
+      "name": "deploy:ind2",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out --outputs-file cdk-outputs-ind2.json --progress events --require-approval never deploy MyApp-ind2"
+        }
+      ]
+    },
     "deploy:preprod": {
       "name": "deploy:preprod",
       "steps": [
@@ -114,6 +130,22 @@
       "steps": [
         {
           "exec": "cdk --app cdk.out --outputs-file cdk-outputs-prod.json --progress events --require-approval never deploy MyApp-prod"
+        }
+      ]
+    },
+    "deploy:prod_in": {
+      "name": "deploy:prod_in",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out --outputs-file cdk-outputs-prod_in.json --progress events --require-approval never deploy MyApp-prod_in"
+        }
+      ]
+    },
+    "deploy:prod_us": {
+      "name": "deploy:prod_us",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out --outputs-file cdk-outputs-prod_us.json --progress events --require-approval never deploy MyApp-prod_us"
         }
       ]
     },
@@ -141,6 +173,22 @@
         }
       ]
     },
+    "diff:ind1": {
+      "name": "diff:ind1",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out diff MyApp-ind1"
+        }
+      ]
+    },
+    "diff:ind2": {
+      "name": "diff:ind2",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out diff MyApp-ind2"
+        }
+      ]
+    },
     "diff:preprod": {
       "name": "diff:preprod",
       "steps": [
@@ -154,6 +202,22 @@
       "steps": [
         {
           "exec": "cdk --app cdk.out diff MyApp-prod"
+        }
+      ]
+    },
+    "diff:prod_in": {
+      "name": "diff:prod_in",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out diff MyApp-prod_in"
+        }
+      ]
+    },
+    "diff:prod_us": {
+      "name": "diff:prod_us",
+      "steps": [
+        {
+          "exec": "cdk --app cdk.out diff MyApp-prod_us"
         }
       ]
     },
@@ -243,6 +307,18 @@
         },
         {
           "spawn": "publish:assets:prod"
+        },
+        {
+          "spawn": "publish:assets:prod_us"
+        },
+        {
+          "spawn": "publish:assets:prod_in"
+        },
+        {
+          "spawn": "publish:assets:ind1"
+        },
+        {
+          "spawn": "publish:assets:ind2"
         }
       ]
     },
@@ -262,6 +338,22 @@
         }
       ]
     },
+    "publish:assets:ind1": {
+      "name": "publish:assets:ind1",
+      "steps": [
+        {
+          "exec": "npx cdk-assets -p cdk.out/MyApp-ind1.assets.json publish"
+        }
+      ]
+    },
+    "publish:assets:ind2": {
+      "name": "publish:assets:ind2",
+      "steps": [
+        {
+          "exec": "npx cdk-assets -p cdk.out/MyApp-ind2.assets.json publish"
+        }
+      ]
+    },
     "publish:assets:preprod": {
       "name": "publish:assets:preprod",
       "steps": [
@@ -275,6 +367,22 @@
       "steps": [
         {
           "exec": "npx cdk-assets -p cdk.out/MyApp-prod.assets.json publish"
+        }
+      ]
+    },
+    "publish:assets:prod_in": {
+      "name": "publish:assets:prod_in",
+      "steps": [
+        {
+          "exec": "npx cdk-assets -p cdk.out/MyApp-prod_in.assets.json publish"
+        }
+      ]
+    },
+    "publish:assets:prod_us": {
+      "name": "publish:assets:prod_us",
+      "steps": [
+        {
+          "exec": "npx cdk-assets -p cdk.out/MyApp-prod_us.assets.json publish"
         }
       ]
     },

@@ -51,6 +51,5 @@ junit.xml
 .parcel-cache/
 /cdk-outputs-*.json
 !/src/app.ts
-!/.codecatalyst/workflows/release-prod.yaml
 !/.codecatalyst/workflows/deploy.yaml
 !/.projenrc.ts

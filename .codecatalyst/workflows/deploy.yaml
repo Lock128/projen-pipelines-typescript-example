@@ -109,3 +109,103 @@ Actions:
     DependsOn:
       - PublishAssetsToAWS
       - deploy_staging
+  approve_prod:
+    Identifier: aws/approval@v1
+    dependsOn:
+      - deploy_preprod
+    Configuration:
+      ApprovalsRequired: 1
+  deploy_prod:
+    Identifier: aws/build@v1
+    Inputs:
+      Sources:
+        - WorkflowSource
+      Variables:
+        - Name: CI
+          Value: "true"
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: false
+    Configuration:
+      Steps:
+        - Run: npx projen install:ci
+        - Run: npx projen deploy:prod
+    DependsOn:
+      - PublishAssetsToAWS
+      - approve_prod
+  approve_prod_us:
+    Identifier: aws/approval@v1
+    dependsOn:
+      - deploy_prod
+    Configuration:
+      ApprovalsRequired: 1
+  deploy_prod_us:
+    Identifier: aws/build@v1
+    Inputs:
+      Sources:
+        - WorkflowSource
+      Variables:
+        - Name: CI
+          Value: "true"
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: false
+    Configuration:
+      Steps:
+        - Run: npx projen install:ci
+        - Run: npx projen deploy:prod_us
+    DependsOn:
+      - PublishAssetsToAWS
+      - approve_prod_us
+  deploy_prod_in:
+    Identifier: aws/build@v1
+    Inputs:
+      Sources:
+        - WorkflowSource
+      Variables:
+        - Name: CI
+          Value: "true"
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: false
+    Configuration:
+      Steps:
+        - Run: npx projen install:ci
+        - Run: npx projen deploy:prod_in
+    DependsOn:
+      - PublishAssetsToAWS
+      - deploy_prod_us
+  indeploy_ind1:
+    Identifier: aws/build@v1
+    Inputs:
+      Sources:
+        - WorkflowSource
+      Variables:
+        - Name: CI
+          Value: "true"
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: false
+    Configuration:
+      Steps:
+        - Run: npx projen install:ci
+        - Run: npx projen deploy:ind1
+    DependsOn:
+      - PublishAssetsToAWS
+  indeploy_ind2:
+    Identifier: aws/build@v1
+    Inputs:
+      Sources:
+        - WorkflowSource
+      Variables:
+        - Name: CI
+          Value: "true"
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: false
+    Configuration:
+      Steps:
+        - Run: npx projen install:ci
+        - Run: npx projen deploy:ind2
+    DependsOn:
+      - PublishAssetsToAWS

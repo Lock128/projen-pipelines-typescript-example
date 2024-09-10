@@ -24,5 +24,5 @@ export declare class CodeCatalystCDKPipeline extends CDKPipeline {
     private createSynth;
     createAssetUpload(): void;
     createDeployment(stage: DeploymentStage): void;
-    createWorkflowForStage(stage: DeploymentStage): void;
+    createIndependentDeployment(stage: DeploymentStage): void;
 }

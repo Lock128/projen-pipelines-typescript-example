@@ -11,11 +11,13 @@
     "pipelines-release": "lib/release.js"
   },
   "bundled": {
+    "@amazon-codecatalyst/blueprint-component.workflows": "^0.3.151",
+    "@amazon-codecatalyst/blueprints.blueprint": "^0.3.151",
     "standard-version": "^9.5.0"
   },
   "dependencies": {
     "constructs": "^10.3.0",
-    "projen": ">=0.81.0 <1.0.0"
+    "projen": ">=0.86.7 <1.0.0"
   },
   "dependencyClosure": {
     "constructs": {
@@ -1132,7 +1134,7 @@
         },
         "locationInModule": {
           "filename": "src/awscdk/codecatalyst.ts",
-          "line": 29
+          "line": 56
         },
         "parameters": [
           {
@@ -1152,7 +1154,7 @@
       "kind": "class",
       "locationInModule": {
         "filename": "src/awscdk/codecatalyst.ts",
-        "line": 20
+        "line": 47
       },
       "methods": [
         {
@@ -1161,7 +1163,7 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 98
+            "line": 130
           },
           "name": "createAssetUpload"
         },
@@ -1171,7 +1173,7 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 124
+            "line": 156
           },
           "name": "createDeployment",
           "parameters": [
@@ -1189,9 +1191,9 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 158
+            "line": 197
           },
-          "name": "createWorkflowForStage",
+          "name": "createIndependentDeployment",
           "parameters": [
             {
               "name": "stage",
@@ -1208,7 +1210,7 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 57
+            "line": 88
           },
           "name": "engineType",
           "overrides": "projen-pipelines.CDKPipeline",
@@ -1228,7 +1230,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 22
+            "line": 49
           },
           "name": "needsVersionedArtifacts",
           "type": {
@@ -1251,7 +1253,7 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "src/awscdk/codecatalyst.ts",
-        "line": 16
+        "line": 43
       },
       "name": "CodeCatalystCDKPipelineOptions",
       "properties": [
@@ -1263,7 +1265,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 17
+            "line": 44
           },
           "name": "iamRoleArns",
           "type": {
@@ -1283,7 +1285,7 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "src/awscdk/codecatalyst.ts",
-        "line": 9
+        "line": 36
       },
       "name": "CodeCatalystIamRoleConfig",
       "properties": [
@@ -1295,7 +1297,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 12
+            "line": 39
           },
           "name": "assetPublishing",
           "optional": true,
@@ -1311,7 +1313,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 10
+            "line": 37
           },
           "name": "default",
           "optional": true,
@@ -1327,7 +1329,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 13
+            "line": 40
           },
           "name": "deployment",
           "optional": true,
@@ -1348,7 +1350,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 11
+            "line": 38
           },
           "name": "synth",
           "optional": true,
@@ -3331,5 +3333,5 @@
     }
   },
   "version": "0.0.0",
-  "fingerprint": "gFpxeulHDWhl/8QqK/kXQQTP53EtIs1jmTNHOLZ4yOw="
+  "fingerprint": "Z1VsVidRCI6RC3tdqEHbN73d61ac/34P13tIOrKIcBI="
 }

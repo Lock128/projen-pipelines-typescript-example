@@ -20,6 +20,14 @@ export interface PipelineAppProps extends AppProps {
   providePreprodStack: (app: App, stackId: string, props: PipelineAppStackProps) => Stack;
   /** This function will be used to generate a prod stack. */
   provideProdStack: (app: App, stackId: string, props: PipelineAppStackProps) => Stack;
+  /** This function will be used to generate a prod_us stack. */
+  provideProdUsStack: (app: App, stackId: string, props: PipelineAppStackProps) => Stack;
+  /** This function will be used to generate a prod_in stack. */
+  provideProdInStack: (app: App, stackId: string, props: PipelineAppStackProps) => Stack;
+  /** This function will be used to generate a ind1 stack. */
+  provideInd1Stack: (app: App, stackId: string, props: PipelineAppStackProps) => Stack;
+  /** This function will be used to generate a ind2 stack. */
+  provideInd2Stack: (app: App, stackId: string, props: PipelineAppStackProps) => Stack;
 
 }
 
@@ -59,6 +67,22 @@ export class PipelineApp extends App {
     // If a function is provided for creating a prod stack, it is called with necessary arguments.
     if (props.provideProdStack) {
       props.provideProdStack(this, 'MyApp-prod', { env: { account: '222222222222', region: 'eu-west-1' }, stackName: 'MyApp-prod', stageName: 'prod' });
+    }
+    // If a function is provided for creating a prod_us stack, it is called with necessary arguments.
+    if (props.provideProdUsStack) {
+      props.provideProdUsStack(this, 'MyApp-prod_us', { env: { account: '222222222222', region: 'us-west-2' }, stackName: 'MyApp-prod_us', stageName: 'prod_us' });
+    }
+    // If a function is provided for creating a prod_in stack, it is called with necessary arguments.
+    if (props.provideProdInStack) {
+      props.provideProdInStack(this, 'MyApp-prod_in', { env: { account: '222222222222', region: 'ap-southeast-1' }, stackName: 'MyApp-prod_in', stageName: 'prod_in' });
+    }
+    // If a function is provided for creating a ind1 stack, it is called with necessary arguments.
+    if (props.provideInd1Stack) {
+      props.provideInd1Stack(this, 'MyApp-ind1', { env: { account: '111111111111', region: 'eu-central-1' }, stackName: 'MyApp-ind1', stageName: 'ind1' });
+    }
+    // If a function is provided for creating a ind2 stack, it is called with necessary arguments.
+    if (props.provideInd2Stack) {
+      props.provideInd2Stack(this, 'MyApp-ind2', { env: { account: '13131313', region: 'eu-central-1' }, stackName: 'MyApp-ind2', stageName: 'ind2' });
     }
 
 
