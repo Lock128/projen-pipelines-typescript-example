@@ -354,7 +354,7 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "src/steps/step.ts",
-        "line": 44
+        "line": 62
       },
       "name": "BashStepConfig",
       "properties": [
@@ -367,7 +367,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/steps/step.ts",
-            "line": 47
+            "line": 65
           },
           "name": "commands",
           "type": {
@@ -1135,7 +1135,7 @@
         },
         "locationInModule": {
           "filename": "src/awscdk/codecatalyst.ts",
-          "line": 64
+          "line": 65
         },
         "parameters": [
           {
@@ -1155,7 +1155,7 @@
       "kind": "class",
       "locationInModule": {
         "filename": "src/awscdk/codecatalyst.ts",
-        "line": 54
+        "line": 55
       },
       "methods": [
         {
@@ -1164,7 +1164,7 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 219
+            "line": 235
           },
           "name": "createAssetUpload"
         },
@@ -1174,7 +1174,7 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 245
+            "line": 261
           },
           "name": "createDeployment",
           "parameters": [
@@ -1192,7 +1192,7 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 100
+            "line": 101
           },
           "name": "createEnvironments"
         },
@@ -1202,7 +1202,7 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 287
+            "line": 303
           },
           "name": "createIndependentDeployment",
           "parameters": [
@@ -1221,7 +1221,7 @@
           },
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 177
+            "line": 178
           },
           "name": "engineType",
           "overrides": "projen-pipelines.CDKPipeline",
@@ -1241,7 +1241,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 56
+            "line": 57
           },
           "name": "needsVersionedArtifacts",
           "type": {
@@ -1264,7 +1264,7 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "src/awscdk/codecatalyst.ts",
-        "line": 50
+        "line": 51
       },
       "name": "CodeCatalystCDKPipelineOptions",
       "properties": [
@@ -1276,7 +1276,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 51
+            "line": 52
           },
           "name": "iamRoleArns",
           "type": {
@@ -1296,7 +1296,7 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "src/awscdk/codecatalyst.ts",
-        "line": 37
+        "line": 38
       },
       "name": "CodeCatalystIamRoleConfig",
       "properties": [
@@ -1309,7 +1309,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 43
+            "line": 44
           },
           "name": "assetPublishing",
           "optional": true,
@@ -1326,7 +1326,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 45
+            "line": 46
           },
           "name": "assetPublishingPerStage",
           "optional": true,
@@ -1348,7 +1348,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 39
+            "line": 40
           },
           "name": "default",
           "optional": true,
@@ -1365,7 +1365,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 47
+            "line": 48
           },
           "name": "deployment",
           "optional": true,
@@ -1387,7 +1387,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/awscdk/codecatalyst.ts",
-            "line": 41
+            "line": 42
           },
           "name": "synth",
           "optional": true,
@@ -1397,6 +1397,104 @@
         }
       ],
       "symbolId": "src/awscdk/codecatalyst:CodeCatalystIamRoleConfig"
+    },
+    "projen-pipelines.CodeCatalystStepConfig": {
+      "assembly": "projen-pipelines",
+      "datatype": true,
+      "docs": {
+        "stability": "stable",
+        "summary": "Configuration interface for a CodeCatalyst Actions step."
+      },
+      "fqn": "projen-pipelines.CodeCatalystStepConfig",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "src/steps/step.ts",
+        "line": 44
+      },
+      "name": "CodeCatalystStepConfig",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "Commands wrapped as GitHub Action job steps."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/steps/step.ts",
+            "line": 50
+          },
+          "name": "commands",
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "string"
+              },
+              "kind": "array"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "Additional environment variables to set for this step."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/steps/step.ts",
+            "line": 53
+          },
+          "name": "env",
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "string"
+              },
+              "kind": "map"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "Dependencies which need to be completed before this step."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/steps/step.ts",
+            "line": 47
+          },
+          "name": "needs",
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "string"
+              },
+              "kind": "array"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "Additional job permissions needed."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "src/steps/step.ts",
+            "line": 56
+          },
+          "name": "permissions",
+          "optional": true,
+          "type": {
+            "fqn": "projen.github.workflows.JobPermissions"
+          }
+        }
+      ],
+      "symbolId": "src/steps/step:CodeCatalystStepConfig"
     },
     "projen-pipelines.DeploymentStage": {
       "assembly": "projen-pipelines",
@@ -1474,6 +1572,23 @@
         "line": 9
       },
       "methods": [
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Converts the step into a CodeCatalyst Actions step configuration."
+          },
+          "locationInModule": {
+            "filename": "src/steps/artifact-steps.ts",
+            "line": 42
+          },
+          "name": "toCodeCatalyst",
+          "overrides": "projen-pipelines.PipelineStep",
+          "returns": {
+            "type": {
+              "fqn": "projen-pipelines.CodeCatalystStepConfig"
+            }
+          }
+        },
         {
           "docs": {
             "remarks": "Should be implemented by subclasses.",
@@ -3009,7 +3124,7 @@
         },
         "locationInModule": {
           "filename": "src/steps/step.ts",
-          "line": 59
+          "line": 77
         },
         "parameters": [
           {
@@ -3026,7 +3141,7 @@
       "kind": "class",
       "locationInModule": {
         "filename": "src/steps/step.ts",
-        "line": 53
+        "line": 71
       },
       "methods": [
         {
@@ -3037,7 +3152,7 @@
           },
           "locationInModule": {
             "filename": "src/steps/step.ts",
-            "line": 80
+            "line": 105
           },
           "name": "toBash",
           "returns": {
@@ -3050,11 +3165,28 @@
           "docs": {
             "remarks": "Should be implemented by subclasses.",
             "stability": "stable",
+            "summary": "Generates a configuration for a CodeCatalyst Actions step."
+          },
+          "locationInModule": {
+            "filename": "src/steps/step.ts",
+            "line": 98
+          },
+          "name": "toCodeCatalyst",
+          "returns": {
+            "type": {
+              "fqn": "projen-pipelines.CodeCatalystStepConfig"
+            }
+          }
+        },
+        {
+          "docs": {
+            "remarks": "Should be implemented by subclasses.",
+            "stability": "stable",
             "summary": "Generates a configuration for a GitHub Actions step."
           },
           "locationInModule": {
             "filename": "src/steps/step.ts",
-            "line": 73
+            "line": 91
           },
           "name": "toGithub",
           "returns": {
@@ -3071,7 +3203,7 @@
           },
           "locationInModule": {
             "filename": "src/steps/step.ts",
-            "line": 66
+            "line": 84
           },
           "name": "toGitlab",
           "returns": {
@@ -3090,7 +3222,7 @@
           },
           "locationInModule": {
             "filename": "src/steps/step.ts",
-            "line": 59
+            "line": 77
           },
           "name": "project",
           "protected": true,
@@ -3116,7 +3248,7 @@
         },
         "locationInModule": {
           "filename": "src/steps/step.ts",
-          "line": 95
+          "line": 120
         },
         "parameters": [
           {
@@ -3147,7 +3279,7 @@
       "kind": "class",
       "locationInModule": {
         "filename": "src/steps/step.ts",
-        "line": 88
+        "line": 113
       },
       "methods": [
         {
@@ -3157,7 +3289,7 @@
           },
           "locationInModule": {
             "filename": "src/steps/step.ts",
-            "line": 114
+            "line": 139
           },
           "name": "toBash",
           "overrides": "projen-pipelines.PipelineStep",
@@ -3170,11 +3302,28 @@
         {
           "docs": {
             "stability": "stable",
+            "summary": "Converts the step into a CodeCatalyst Actions step configuration."
+          },
+          "locationInModule": {
+            "filename": "src/steps/step.ts",
+            "line": 159
+          },
+          "name": "toCodeCatalyst",
+          "overrides": "projen-pipelines.PipelineStep",
+          "returns": {
+            "type": {
+              "fqn": "projen-pipelines.CodeCatalystStepConfig"
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable",
             "summary": "Converts the step into a GitHub Actions step configuration."
           },
           "locationInModule": {
             "filename": "src/steps/step.ts",
-            "line": 123
+            "line": 148
           },
           "name": "toGithub",
           "overrides": "projen-pipelines.PipelineStep",
@@ -3191,7 +3340,7 @@
           },
           "locationInModule": {
             "filename": "src/steps/step.ts",
-            "line": 102
+            "line": 127
           },
           "name": "toGitlab",
           "overrides": "projen-pipelines.PipelineStep",
@@ -3211,7 +3360,7 @@
           },
           "locationInModule": {
             "filename": "src/steps/step.ts",
-            "line": 95
+            "line": 120
           },
           "name": "commands",
           "protected": true,
@@ -3273,7 +3422,7 @@
         },
         "locationInModule": {
           "filename": "src/steps/artifact-steps.ts",
-          "line": 48
+          "line": 59
         },
         "parameters": [
           {
@@ -3296,9 +3445,26 @@
       "kind": "class",
       "locationInModule": {
         "filename": "src/steps/artifact-steps.ts",
-        "line": 46
+        "line": 57
       },
       "methods": [
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Converts the step into a CodeCatalyst Actions step configuration."
+          },
+          "locationInModule": {
+            "filename": "src/steps/artifact-steps.ts",
+            "line": 81
+          },
+          "name": "toCodeCatalyst",
+          "overrides": "projen-pipelines.PipelineStep",
+          "returns": {
+            "type": {
+              "fqn": "projen-pipelines.CodeCatalystStepConfig"
+            }
+          }
+        },
         {
           "docs": {
             "remarks": "Should be implemented by subclasses.",
@@ -3307,7 +3473,7 @@
           },
           "locationInModule": {
             "filename": "src/steps/artifact-steps.ts",
-            "line": 52
+            "line": 63
           },
           "name": "toGithub",
           "overrides": "projen-pipelines.PipelineStep",
@@ -3331,7 +3497,7 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "src/steps/artifact-steps.ts",
-        "line": 41
+        "line": 52
       },
       "name": "UploadArtifactStepConfig",
       "properties": [
@@ -3343,7 +3509,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/steps/artifact-steps.ts",
-            "line": 42
+            "line": 53
           },
           "name": "name",
           "type": {
@@ -3358,7 +3524,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "src/steps/artifact-steps.ts",
-            "line": 43
+            "line": 54
           },
           "name": "path",
           "type": {
@@ -3370,5 +3536,5 @@
     }
   },
   "version": "0.0.0",
-  "fingerprint": "i6/yvm6drZ7q8/G00FH4f8hXhELtCCeByJarAJM0Cyg="
+  "fingerprint": "wQx6qIS8gu7w/xbUeq9ctB7uuS/HHGI1pY487Cj74g4="
 }

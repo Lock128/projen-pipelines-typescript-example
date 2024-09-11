@@ -32,6 +32,21 @@ export interface GithubStepConfig {
     readonly permissions?: JobPermissions;
 }
 /**
+ * Configuration interface for a CodeCatalyst Actions step.
+ */
+export interface CodeCatalystStepConfig {
+    /** Dependencies which need to be completed before this step. */
+    readonly needs: string[];
+    /** Commands wrapped as GitHub Action job steps. */
+    readonly commands: string[];
+    /** Additional environment variables to set for this step. */
+    readonly env: {
+        [key: string]: string;
+    };
+    /** Additional job permissions needed */
+    readonly permissions?: JobPermissions;
+}
+/**
  * Configuration interface for a bash script step.
  */
 export interface BashStepConfig {
@@ -56,6 +71,10 @@ export declare abstract class PipelineStep {
      * Generates a configuration for a GitHub Actions step. Should be implemented by subclasses.
      */
     toGithub(): GithubStepConfig;
+    /**
+     * Generates a configuration for a CodeCatalyst Actions step. Should be implemented by subclasses.
+     */
+    toCodeCatalyst(): CodeCatalystStepConfig;
     /**
      * Generates a configuration for a bash script step. Should be implemented by subclasses.
      */
@@ -84,4 +103,8 @@ export declare class SimpleCommandStep extends PipelineStep {
      * Converts the step into a GitHub Actions step configuration.
      */
     toGithub(): GithubStepConfig;
+    /**
+     * Converts the step into a CodeCatalyst Actions step configuration.
+     */
+    toCodeCatalyst(): CodeCatalystStepConfig;
 }
